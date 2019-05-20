@@ -17,25 +17,39 @@ import random
 import redis
 
 
+# # redis
+# REDIS_SETTINGS = dict(
+#     host='localhost',
+#     port=10001,
+#     db=1,
+#     decode_responses=True,
+# )
 # redis
 REDIS_SETTINGS = dict(
-    host='localhost',
-    port=10001,
+    host='10.10.53.221',
+    port=6379,
     db=1,
     decode_responses=True,
 )
+
+
+
 
 
 class ProxyPool(object):
     __slots__ = ('__name', '__client', '__interval')
 
     def __init__(self):
-        # hostname = socket.gethostname()
+        hostname = socket.gethostname()
 
-        x = ['ip_proxy1', 'ip_proxy2', 'ip_proxy3']
-
-        self.__name = random.choice(x)
-        print(self.__name)
+        if hostname in ('wx09', 'wx01', 'wx02'):
+            self.__name = 'ip_proxy1'
+        elif hostname in ('wx03', 'wx04', 'wx05'):
+            self.__name = 'ip_proxy2'
+        elif hostname in ('wx06', 'wx07', 'wx08'):
+            self.__name = 'ip_proxy3'
+        else:
+            raise RuntimeError('hostname {} is not illegal.'.format(hostname))
 
         self.__client = redis.Redis(**REDIS_SETTINGS)
 
