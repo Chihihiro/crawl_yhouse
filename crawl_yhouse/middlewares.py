@@ -147,7 +147,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_experimental_option("prefs", self.prefs)
             pp = proxies.get('http')
             self.option.add_argument("--proxy-server=http://%s" %pp)
-            # # option.add_argument('--headless')
+            self.option.add_argument('--headless')
             self.driver = Chrome(options=self.option)
             self.driver.set_page_load_timeout(10)
             id = re.search('\d+', request.url).group()
