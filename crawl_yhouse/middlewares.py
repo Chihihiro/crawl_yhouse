@@ -130,7 +130,7 @@ class CrawlYhouseDownloaderMiddleware(object):
         print(hostname)
 
         if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
-            pp = ProxyPool().get_proxy().get('http')
+            pp = ProxyPool().get_proxy().get('https')
         else:
             pro = [
                 '112.65.52.112:4575'
