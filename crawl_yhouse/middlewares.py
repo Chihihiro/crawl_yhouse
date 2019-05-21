@@ -140,6 +140,7 @@ class CrawlYhouseDownloaderMiddleware(object):
         proxies = {
             'http': pp,
         }
+        DR = '/usr/local/bin/chromedriver'
         try:
             self.option = ChromeOptions()
             self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
@@ -148,7 +149,10 @@ class CrawlYhouseDownloaderMiddleware(object):
             pp = proxies.get('http')
             self.option.add_argument("--proxy-server=http://%s" %pp)
             self.option.add_argument('--headless')
-            self.driver = Chrome(options=self.option)
+            if hostname == 'chihiro':
+                self.driver = Chrome(options=self.option)
+            else:
+                self.driver = Chrome(options=self.option, executable_path=DR)
             self.driver.set_page_load_timeout(10)
             id = re.search('\d+', request.url).group()
             try:
