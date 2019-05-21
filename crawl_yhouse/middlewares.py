@@ -129,13 +129,13 @@ class CrawlYhouseDownloaderMiddleware(object):
         hostname = socket.gethostname()
         print(hostname)
 
-        if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
-            pp = ProxyPool().get_proxy().get('http')[7:]
-        else:
-            pro = [
-                '112.65.52.222:4575'
-            ]
-            pp = random.choice(pro)
+        # if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
+        #     pp = ProxyPool().get_proxy().get('http')[7:]
+        # else:
+        pro = [
+            '112.65.53.130:4575'
+        ]
+        pp = random.choice(pro)
         print('本次使用的代理为', pp)
         proxies = {
             'http': pp,
@@ -153,7 +153,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 self.driver = Chrome(options=self.option)
             else:
                 self.driver = Chrome(options=self.option, executable_path=DR)
-            self.driver.set_page_load_timeout(15)
+            self.driver.set_page_load_timeout(20)
             id = re.search('\d+', request.url).group()
             try:
                 self.driver.get(request.url)
