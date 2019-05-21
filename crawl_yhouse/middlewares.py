@@ -127,6 +127,7 @@ class CrawlYhouseDownloaderMiddleware(object):
 
     def process_request(self, request, spider, second=0):
         hostname = socket.gethostname()
+        print(hostname)
 
         if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
             pp = ProxyPool().get_proxy().get('http')

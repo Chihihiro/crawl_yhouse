@@ -125,6 +125,7 @@ class ProxyPool(object):
 
 
 
-# http_proxy = ProxyPool().get_proxy().get('http')
-# print(http_proxy)
+http_proxy = ProxyPool().get_proxy().get('http')
+print(http_proxy)
+print(socket.gethostname())
 

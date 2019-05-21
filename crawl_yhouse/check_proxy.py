@@ -15,11 +15,11 @@
 # # 退出，清除浏览器缓存
 # # browser.quit()
 #
-# # import telnetlib
-# # try:
-# #   telnetlib.Telnet('106.111.45.220', port='4576', timeout=5)
-# # except:
-# #   print('connect failed')
-# # else:
-# #   print('success')
-#
+# import telnetlib
+# try:
+#   telnetlib.Telnet('61.132.93.14', port='41818', timeout=5)
+# except:
+#   print('connect failed')
+# else:
+#   print('success')
+# #
