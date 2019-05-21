@@ -18,7 +18,7 @@ from requests import Session
 from crawl_yhouse.proxy_pool import *
 import random
 import socket
-
+from crawl_yhouse.user_agent import user_agent
 
 
 class CrawlYhouseSpiderMiddleware(object):
@@ -129,14 +129,14 @@ class CrawlYhouseDownloaderMiddleware(object):
         hostname = socket.gethostname()
         print(hostname)
 
-        # if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
-        #     pp = ProxyPool().get_proxy().get('https')
-        # else:
-        pro = [
-            '112.65.52.222:4575'
+        if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
+            pp = ProxyPool().get_proxy().get('https')
+        else:
+            pro = [
+                '112.65.52.222:4575'
 
-        ]
-        pp = random.choice(pro)
+            ]
+            pp = random.choice(pro)
         print('本次使用的代理为', pp)
         proxies = {
             'http': pp,
@@ -154,7 +154,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 self.driver = Chrome(options=self.option)
             else:
                 self.driver = Chrome(options=self.option, executable_path=DR)
-            self.driver.set_page_load_timeout(10)
+            self.driver.set_page_load_timeout(20)
             id = re.search('\d+', request.url).group()
             try:
                 self.driver.get(request.url)
@@ -192,8 +192,9 @@ class CrawlYhouseDownloaderMiddleware(object):
             session = Session()
             # 传入cookies
             session.cookies.update(cookies)
+
             header = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36',
+                'User-Agent': random.choice(user_agent),
                 'Referer': 'http://hotel.elong.com/%s/' %id,
                 'Origin': 'http://hotel.elong.com',
                 'Host': 'hotel.elong.com',
