@@ -134,7 +134,6 @@ class CrawlYhouseDownloaderMiddleware(object):
         else:
             pro = [
                 '112.65.52.222:4575'
-
             ]
             pp = random.choice(pro)
         print('本次使用的代理为', pp)
@@ -154,7 +153,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 self.driver = Chrome(options=self.option)
             else:
                 self.driver = Chrome(options=self.option, executable_path=DR)
-            self.driver.set_page_load_timeout(20)
+            self.driver.set_page_load_timeout(7)
             id = re.search('\d+', request.url).group()
             try:
                 self.driver.get(request.url)
@@ -194,7 +193,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             session.cookies.update(cookies)
 
             header = {
-                'User-Agent': random.choice(user_agent),
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36',
                 'Referer': 'http://hotel.elong.com/%s/' %id,
                 'Origin': 'http://hotel.elong.com',
                 'Host': 'hotel.elong.com',
