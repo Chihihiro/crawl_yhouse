@@ -129,14 +129,14 @@ class CrawlYhouseDownloaderMiddleware(object):
         hostname = socket.gethostname()
         print(hostname)
 
-        if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
-            pp = ProxyPool().get_proxy().get('https')
-        else:
-            pro = [
-                '112.65.52.112:4575'
+        # if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
+        #     pp = ProxyPool().get_proxy().get('https')
+        # else:
+        pro = [
+            '112.65.52.222:4575'
 
-            ]
-            pp = random.choice(pro)
+        ]
+        pp = random.choice(pro)
         print('本次使用的代理为', pp)
         proxies = {
             'http': pp,
