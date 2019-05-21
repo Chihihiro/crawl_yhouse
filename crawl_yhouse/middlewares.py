@@ -15,8 +15,11 @@ from selenium.webdriver import ChromeOptions
 import re
 import json
 from requests import Session
-# from crawl_yhouse.proxy_pool import http_proxy
+from crawl_yhouse.proxy_pool import *
 import random
+import socket
+
+
 
 class CrawlYhouseSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
@@ -123,22 +126,17 @@ class CrawlYhouseDownloaderMiddleware(object):
         return s
 
     def process_request(self, request, spider, second=0):
-        # print('请求second', second)
+        hostname = socket.gethostname()
 
+        if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
+            pp = ProxyPool().get_proxy().get('http')
+        else:
+            pro = [
+                '112.65.52.112:4575'
 
-        # proxies = {
-        #     'http': http_proxy[7:],
-        # }
-        # print(http_proxy)
-        # print(proxies)
-
-        # pro.pop(pp)
-        pro = [
-            '112.65.52.112:4575'
-
-        ]
-        pp = random.choice(pro)
-        print(pp)
+            ]
+            pp = random.choice(pro)
+        print('本次使用的代理为', pp)
         proxies = {
             'http': pp,
         }
@@ -151,11 +149,8 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_argument("--proxy-server=http://%s" %pp)
             # # option.add_argument('--headless')
             self.driver = Chrome(options=self.option)
-            self.driver.set_page_load_timeout(7)
-            # self.wait = WebDriverWait(self.driver, 4)
+            self.driver.set_page_load_timeout(10)
             id = re.search('\d+', request.url).group()
-            # print(request.url)
-
             try:
                 self.driver.get(request.url)
             except TimeoutException:
@@ -170,11 +165,23 @@ class CrawlYhouseDownloaderMiddleware(object):
                     return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
                 # return HtmlResponse(url=request.url, body=request.url, status=200, encoding="utf-8", request=request)
             # 获取cookies
-            cookies_info = self.driver.get_cookies()
-            # print(cookies_info)
-            cookies = cookie_to_dict(cookies_info)
-            data = self.driver.execute_script('return window.localStorage.roomparams;')
-            # print(data)
+            try:
+                time.sleep(2)
+                cookies_info = self.driver.get_cookies()
+                # print(cookies_info)
+                cookies = cookie_to_dict(cookies_info)
+                data = self.driver.execute_script('return window.localStorage.roomparams;')
+                print('data为', data)
+            except BaseException as e:
+                print(e)
+                time.sleep(2)
+                cookies_info = self.driver.get_cookies()
+                # print(cookies_info)
+                cookies = cookie_to_dict(cookies_info)
+                data = self.driver.execute_script('return window.localStorage.roomparams;')
+                print('data为', data)
+            else:
+                pass
             json_data = json.loads(data)
             # 设置会话
             session = Session()
