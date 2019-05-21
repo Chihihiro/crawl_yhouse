@@ -15,7 +15,7 @@ from selenium.webdriver import ChromeOptions
 import re
 import json
 from requests import Session
-from crawl_yhouse.proxy_pool import http_proxy
+# from crawl_yhouse.proxy_pool import http_proxy
 import random
 
 class CrawlYhouseSpiderMiddleware(object):
@@ -123,7 +123,7 @@ class CrawlYhouseDownloaderMiddleware(object):
         return s
 
     def process_request(self, request, spider, second=0):
-        print('请求second', second)
+        # print('请求second', second)
 
 
         # proxies = {
@@ -134,7 +134,7 @@ class CrawlYhouseDownloaderMiddleware(object):
 
         # pro.pop(pp)
         pro = [
-            '218.91.65.63:4582'
+            '112.65.52.112:4575'
 
         ]
         pp = random.choice(pro)
@@ -147,13 +147,14 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
             self.prefs = {"profile.managed_default_content_settings.images": 2}
             self.option.add_experimental_option("prefs", self.prefs)
-            self.option.add_argument(f"--proxy-server=http://{proxies.get('http')}")
+            pp = proxies.get('http')
+            self.option.add_argument("--proxy-server=http://%s" %pp)
             # # option.add_argument('--headless')
             self.driver = Chrome(options=self.option)
             self.driver.set_page_load_timeout(7)
             # self.wait = WebDriverWait(self.driver, 4)
             id = re.search('\d+', request.url).group()
-            print(request.url)
+            # print(request.url)
 
             try:
                 self.driver.get(request.url)
@@ -181,7 +182,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             session.cookies.update(cookies)
             header = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.131 Safari/537.36',
-                'Referer': f'http://hotel.elong.com/{id}/',
+                'Referer': 'http://hotel.elong.com/%s/' %id,
                 'Origin': 'http://hotel.elong.com',
                 'Host': 'hotel.elong.com',
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -203,7 +204,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             # return self.process_request(request, spider)
             second += 1
             if second <= 2:#这里设置重新获取的机会默认2等于三次
-                print('再给最后一次机会')
+                # print('再给最后一次机会')
                 return self.process_request(request, spider, second=second)
             return HtmlResponse(url=request.url, body=request.url, status=201, encoding="utf-8", request=request)
             # return response

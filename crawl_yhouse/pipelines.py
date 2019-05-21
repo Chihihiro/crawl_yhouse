@@ -5,13 +5,11 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
-from sqlalchemy import create_engine
+
 import pandas as pd
 import re
 from crawl_yhouse.items import *
-
-engine_crawl = create_engine("mysql+pymysql://{}:{}@{}:{}/{}".format(
-    'root', 'chihiro123', '47.107.35.189', 3306, 'spider', ), connect_args={"charset": "utf8"}, echo=True, )
+from crawl_yhouse.engines import choise_engine
 
 
 
@@ -28,7 +26,7 @@ def clean3(str1):
         sst = re.search('<(.+?)>', str1).group()
     except AttributeError:
         return str1
-    last_str = re.sub(f'{sst}|</b>', '', str1)
+    last_str = re.sub('%s|</b>' % sst, '', str1)
     return last_str
 
 
@@ -48,7 +46,7 @@ class CrawlYhousePipeline(object):
         df['order_status'] = df['order_status'].apply(lambda x: 1 if x == True else 0)
         df['policy'] = df['policy'].apply(lambda x: clean3(x))
         # clean_df = for_columns(df)
-        to_sql(table, engine_crawl, df, type="update")
+        to_sql(table, choise_engine, df, type="update")
         return item
 
 

@@ -6,21 +6,16 @@ import pandas as pd
 from scrapy import Selector
 import json
 import time
-from sqlalchemy import create_engine
 from crawl_yhouse.items import CrawlYhouseItem
+from crawl_yhouse.engines import choise_engine as engine
 
-engine_config_private = create_engine(
-    "mysql+pymysql://{}:{}@{}:{}/{}".format('spider_dev', 'csQXEMw9udrC4f*4JB6WnGiv2MKZRn', 'localhost', 13306,
-                                            'yhouse', ), connect_args={"charset": "utf8"}, echo=True, )
-my_engine = create_engine(
-    "mysql+pymysql://{}:{}@{}:{}/{}".format('root', 'chihiro123', '47.107.35.189', 3306,
-                                            'spider', ), connect_args={"charset": "utf8"}, echo=True, )
+
 
 
 
 def get_id():
     sql = "select yhotel_id, return_id from yilong"
-    df = pd.read_sql(sql, my_engine)
+    df = pd.read_sql(sql, engine)
     y2y_id = dict(zip(df['return_id'], df['yhotel_id']))
     return y2y_id
 
@@ -42,9 +37,9 @@ class YilongSpider(scrapy.Spider):
     name = 'yilong'
     # allowed_domains = ['http://hotel.elong.com/92494775/']
     start_urls = [
-                  # 'http://hotel.elong.com/52001128/',
-                  # 'http://hotel.elong.com/50301037/',
-                  # # 'http://hotel.elong.com/90684208/',
+                  'http://hotel.elong.com/52001128/',
+                  'http://hotel.elong.com/50301037/',
+                  # 'http://hotel.elong.com/90684208/',
                   # 'http://hotel.elong.com/40201069/',
                   # 'http://hotel.elong.com/10201185/',
                   # 'http://hotel.elong.com/40201010/',
@@ -53,31 +48,16 @@ class YilongSpider(scrapy.Spider):
                   # 'http://hotel.elong.com/10201307/',
                   # 'http://hotel.elong.com/40201044/',
                   # 'http://hotel.elong.com/10201082/',
-
                   # 'http://hotel.elong.com/50201055/',
-                  'http://hotel.elong.com/40201192/',
+                  # 'http://hotel.elong.com/40201192/',
                   # 'http://hotel.elong.com/50201284/',
-                  'http://hotel.elong.com/50201261/',
+                  # 'http://hotel.elong.com/50201261/',
                   # 'http://hotel.elong.com/50201481/',
                   # 'http://hotel.elong.com/00101108/',
                   # 'http://hotel.elong.com/40301051/',
                   # 'http://hotel.elong.com/00101972/',
                   # 'http://hotel.elong.com/40101839/',
                   # 'http://hotel.elong.com/40101676/',
-                  # 'http://hotel.elong.com/40101654/',
-                  # 'http://hotel.elong.com/40101763/',
-                  # 'http://hotel.elong.com/90042126/',
-                  # 'http://hotel.elong.com/50101564/',
-                  # 'http://hotel.elong.com/50101482/',
-                  # 'http://hotel.elong.com/52003122/',
-                  # 'http://hotel.elong.com/40601023/',
-                  # 'http://hotel.elong.com/50101474/',
-                  # 'http://hotel.elong.com/50301027/',
-                  # 'http://hotel.elong.com/51233002/',
-                  # 'http://hotel.elong.com/91281145/',
-                  # 'http://hotel.elong.com/50901020/',
-                  # 'http://hotel.elong.com/52003014/',
-                  # 'http://hotel.elong.com/52701047/',
                   ]
 
 
@@ -107,7 +87,7 @@ class YilongSpider(scrapy.Spider):
             print(info['hotelTipInfo']['hotelId'])
             yilong_id = info['hotelTipInfo']['hotelId']
             if yilong_id ==yhouse_id:
-                print('请求成功拿到正确id')
+                # print '请求成功拿到正确id'
                 item = CrawlYhouseItem()
                 host_id = self.to_getid.get(yhouse_id)
                 item['host_id'] = host_id
@@ -134,10 +114,10 @@ class YilongSpider(scrapy.Spider):
                         item['create_time'] = chang_time_all()
                         item['order_status'] = room['enableBook']
                         item['sou'] = 0
-                        print(item)
                         yield item
             else:
                 print('ID不相同')
+                pass
             pass
         else:
             pass

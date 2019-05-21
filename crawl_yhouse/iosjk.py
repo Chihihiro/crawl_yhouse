@@ -2,7 +2,6 @@ import sys
 import os
 import pandas as pd
 import shutil
-
 import re
 from openpyxl import load_workbook
 import time
@@ -61,7 +60,8 @@ def to_sql(tb_name, conn, dataframe, type="update", chunksize=2000, debug=False)
 
     df = dataframe.copy(deep=False)
     df = df.fillna("None")
-    df = df.applymap(lambda x: re.sub('([\'\"\\\])', '\\\\\g<1>', str(x)))
+    # df = df.applymap(lambda x: re.sub('([\'\"\\\])', '\\\\\g<1>', str(x)))
+    df = df.applymap(lambda x: re.sub("""([\'\"\\\])""", '\\\\\g<1>', str(x)))
     cols_str = sql_cols(df)
     sqls = []
     for i in range(0, len(df), chunksize):

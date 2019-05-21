@@ -4,10 +4,10 @@ IP代理池
 受限于第三方代理的白名单
 一个代理通道只支持3个访问IP白名单
 """
-# from __future__ import absolute_import
-# from __future__ import division
-# from __future__ import print_function
-# from __future__ import unicode_literals
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
 
 import json
 import socket
@@ -17,14 +17,15 @@ import random
 import redis
 
 
-# # redis
-# REDIS_SETTINGS = dict(
-#     host='localhost',
-#     port=10001,
-#     db=1,
-#     decode_responses=True,
-# )
-# redis
+
+local = dict(
+    host='localhost',
+    port=10001,
+    db=1,
+    decode_responses=True,
+)
+
+
 REDIS_SETTINGS = dict(
     host='10.10.53.221',
     port=6379,
@@ -48,10 +49,15 @@ class ProxyPool(object):
             self.__name = 'ip_proxy2'
         elif hostname in ('wx06', 'wx07', 'wx08'):
             self.__name = 'ip_proxy3'
+        elif hostname in ('DESKTOP-6UPQ2C9', 'chihiro'):
+            self.__name = 'ip_proxy1'
         else:
             raise RuntimeError('hostname {} is not illegal.'.format(hostname))
 
-        self.__client = redis.Redis(**REDIS_SETTINGS)
+        if hostname in ('DESKTOP-6UPQ2C9', 'chihiro'):
+            self.__client = redis.Redis(**local)
+        else:
+            self.__client = redis.Redis(**REDIS_SETTINGS)
 
         self.__interval = 10
 
@@ -119,6 +125,6 @@ class ProxyPool(object):
 
 
 
-http_proxy = ProxyPool().get_proxy().get('http')
-print(http_proxy)
+# http_proxy = ProxyPool().get_proxy().get('http')
+# print(http_proxy)
 
