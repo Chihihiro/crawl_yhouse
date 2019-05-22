@@ -133,7 +133,7 @@ class CrawlYhouseDownloaderMiddleware(object):
         #     pp = ProxyPool().get_proxy().get('http')[7:]
         # else:
         pro = [
-            '112.65.52.221:4575',
+            '112.64.53.222:4575',
             # '66666'
         ]
         pp = random.choice(pro)
@@ -149,12 +149,23 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_experimental_option("prefs", self.prefs)
             pp = proxies.get('http')
             self.option.add_argument("--proxy-server=http://%s" %pp)
-            self.option.add_argument('--headless')
+            # self.option.add_argument('--headless')
+            # self.option.defineProperty(navigator, 'webdriver', {get: () = > false,});
+
+
             if hostname == 'chihiro':
                 self.driver = Chrome(options=self.option)
+                self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
             else:
                 self.driver = Chrome(options=self.option, executable_path=DR)
+                self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
+            self.driver.set_window_position(10, 10)
+            self.driver.set_window_size(945, 1020)
+            self.driver.set_window_rect(10, 10, 945, 1020)
             self.driver.set_page_load_timeout(20)
+            print(self.driver.get_window_position())
+            print(self.driver.get_window_size())
+            print(self.driver.get_window_rect())
             id = re.search('\d+', request.url).group()
             try:
                 self.driver.get(request.url)
