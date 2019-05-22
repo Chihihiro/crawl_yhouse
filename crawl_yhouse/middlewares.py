@@ -149,6 +149,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_experimental_option("prefs", self.prefs)
             pp = proxies.get('http')
             self.option.add_argument("--proxy-server=http://%s" %pp)
+            self.option.add_argument('–no-sandbox')
             # self.option.add_argument('--headless')
             # self.option.defineProperty(navigator, 'webdriver', {get: () = > false,});
 
@@ -157,6 +158,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 self.driver = Chrome(options=self.option)
                 self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
             else:
+
                 self.driver = Chrome(options=self.option, executable_path=DR)
                 self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
             self.driver.set_window_position(10, 10)
