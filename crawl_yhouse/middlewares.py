@@ -149,7 +149,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_experimental_option("prefs", self.prefs)
             pp = proxies.get('http')
             self.option.add_argument("--proxy-server=http://%s" %pp)
-            # self.option.add_argument('--headless')
+            self.option.add_argument('--headless')
             if hostname == 'chihiro':
                 self.driver = Chrome(options=self.option)
             else:
