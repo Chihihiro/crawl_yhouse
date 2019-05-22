@@ -133,7 +133,8 @@ class CrawlYhouseDownloaderMiddleware(object):
         #     pp = ProxyPool().get_proxy().get('http')[7:]
         # else:
         pro = [
-            '112.65.53.130:4575'
+            '112.65.52.221:4575',
+            # '66666'
         ]
         pp = random.choice(pro)
         print('本次使用的代理为', pp)
@@ -148,7 +149,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_experimental_option("prefs", self.prefs)
             pp = proxies.get('http')
             self.option.add_argument("--proxy-server=http://%s" %pp)
-            self.option.add_argument('--headless')
+            # self.option.add_argument('--headless')
             if hostname == 'chihiro':
                 self.driver = Chrome(options=self.option)
             else:
@@ -178,6 +179,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 print('data为', data)
             except BaseException as e:
                 print(e)
+                print('休息两秒第二次再请求')
                 time.sleep(2)
                 cookies_info = self.driver.get_cookies()
                 # print(cookies_info)
@@ -185,7 +187,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
                 print('data为', data)
             else:
-                pass
+                self.driver.quit()
             json_data = json.loads(data)
             # 设置会话
             session = Session()
@@ -193,6 +195,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             session.cookies.update(cookies)
 
             header = {
+                # 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36',
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36',
                 'Referer': 'http://hotel.elong.com/%s/' %id,
                 'Origin': 'http://hotel.elong.com',
