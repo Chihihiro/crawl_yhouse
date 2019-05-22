@@ -149,7 +149,9 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_experimental_option("prefs", self.prefs)
             pp = proxies.get('http')
             self.option.add_argument("--proxy-server=http://%s" %pp)
-            self.option.add_argument('–no-sandbox')
+            self.option.add_argument('--no-sandbox')
+            self.option.add_argument('blink-settings=imagesEnabled=false')
+            self.option.add_argument('--disable-gpu')
             # self.option.add_argument('--headless')
             # self.option.defineProperty(navigator, 'webdriver', {get: () = > false,});
 
