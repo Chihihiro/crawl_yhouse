@@ -27,12 +27,13 @@
 #     async def run(self):
 #         # 爬虫主逻辑
 #         pass
-# from selenium.webdriver import Chrome
-# from selenium.webdriver import ChromeOptions
-# from pyvirtualdisplay import Display
-# display = Display(visible=0, size=(1024, 768))
-# display.start()
-# driver = Chrome()
-# driver.get('http://mail.sina.net');
-# print(driver.title)
-# display.stop()
+from selenium.webdriver import Chrome
+from selenium.webdriver import ChromeOptions
+from pyvirtualdisplay import Display
+DR = '/usr/local/bin/chromedriver'
+display = Display(visible=0, size=(1024, 768))
+display.start()
+driver = Chrome(executable_path=DR)
+driver.get('http://www.baidu.com')
+print(driver.page_source)
+display.stop()
