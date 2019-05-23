@@ -171,7 +171,6 @@ class CrawlYhouseDownloaderMiddleware(object):
                 js3 = '''Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] }); '''
                 js4 = '''Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3], }); '''
                 js5 = '''if (/HeadlessChrome/.pytt(window.navigator.userAgent)) {console.log("Chrome headless detected");}'''
-
                 self.driver.execute_script(js1)
                 self.driver.execute_script(js2)
                 self.driver.execute_script(js3)
@@ -201,7 +200,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 if second == 0:
                     # self.driver.execute_script("window.stop()")
                     self.driver.quit()
-                    display.stop()
+                    # display.stop()
                     return self.process_request(request, spider, second=1)
                 else:
                     return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
@@ -214,7 +213,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             user3 = self.driver.execute_script("return window.outerHeight;")
             print(user3)
             user4 = self.driver.execute_script("return window.navigator.webdriver;")
-            print(user4)
+            print('是否绕过无头检测',user4)
             try:
                 time.sleep(2)
                 cookies_info = self.driver.get_cookies()
@@ -234,7 +233,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 print('data为', data)
             else:
                 self.driver.quit()
-                display.stop()
+                # display.stop()
             json_data = json.loads(data)
             # 设置会话
             session = Session()
@@ -257,14 +256,14 @@ class CrawlYhouseDownloaderMiddleware(object):
             json_url = 'http://hotel.elong.com/ajax/tmapidetail/gethotelroomsetjvajson'
             html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
             self.driver.quit()
-            display.stop()
+            # display.stop()
             return HtmlResponse(url=request.url, body=html, status=200, encoding="utf-8", request=request)
         except BaseException as e:
             print(e)
             print('代理有问题')
             print(request.url)
             self.driver.quit()
-            display.stop()
+            # display.stop()
             # return self.process_request(request, spider)
             second += 1
             if second <= 2:#这里设置重新获取的机会默认2等于三次
