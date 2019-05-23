@@ -77,7 +77,7 @@ class YilongSpider(scrapy.Spider):
     def parse(self, response):
         print('到 parse了')
         print(response.status)
-        print(response.body)
+        # print(response.body)
         if response.status == 201:
             print(2011111111111)
         elif response.status == 200:
