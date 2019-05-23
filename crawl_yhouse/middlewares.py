@@ -135,7 +135,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             pp = ProxyPool().get_proxy().get('http')[7:]
             # pp = '115.225.85.41:4539'
 
-            display = Display(visible=0, size=(1024, 768))
+            display = Display(visible=1, size=(1024, 768))
             display.start()
         else:
             pro = [
