@@ -12,6 +12,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver import Chrome
 from selenium.webdriver import ChromeOptions
+from selenium.webdriver.chrome.options import Options
 import re
 import json
 from requests import Session
@@ -93,9 +94,10 @@ def change_args(x):
 
 
 
+from pyvirtualdisplay import Display
 
 
-
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
 class CrawlYhouseDownloaderMiddleware(object):
@@ -133,7 +135,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             pp = ProxyPool().get_proxy().get('http')[7:]
         else:
             pro = [
-                '112.64.53.222:4575',
+                '182.34.199.233:4576',
                 # '66666'
             ]
             pp = random.choice(pro)
@@ -142,9 +144,12 @@ class CrawlYhouseDownloaderMiddleware(object):
             'http': pp,
         }
         DR = '/usr/local/bin/chromedriver'
+        display = Display(visible=0, size=(1024, 768))
+        display.start()
+
         try:
             self.option = ChromeOptions()
-            self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
+            # self.option.add_experimental_option('excludeSwitches', ['ignore-certificate-errors'])
             self.prefs = {"profile.managed_default_content_settings.images": 2}
             self.option.add_experimental_option("prefs", self.prefs)
             pp = proxies.get('http')
@@ -153,12 +158,27 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_argument('blink-settings=imagesEnabled=false')
             self.option.add_argument('--disable-gpu')
             self.option.add_argument('--headless')
-            # self.option.defineProperty(navigator, 'webdriver', {get: () = > false,});
+            self.option.add_argument('window-size=1920x1024')  # 指定浏览器分辨率
+            self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
+            self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
+
 
 
             if hostname == 'chihiro':
                 self.driver = Chrome(options=self.option)
-                self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
+                js1 = "Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});"
+                js2 = '''window.navigator.chrome = { runtime: {},  }; '''
+                js3 = '''Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] }); '''
+                js4 = '''Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3], }); '''
+                js5 = '''if (/HeadlessChrome/.pytt(window.navigator.userAgent)) {console.log("Chrome headless detected");}'''
+
+                self.driver.execute_script(js1)
+                self.driver.execute_script(js2)
+                self.driver.execute_script(js3)
+                self.driver.execute_script(js4)
+                self.driver.execute_script(js5)
+
+                # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
             else:
 
                 self.driver = Chrome(options=self.option, executable_path=DR)
@@ -173,6 +193,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             id = re.search('\d+', request.url).group()
             try:
                 self.driver.get(request.url)
+                # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
             except TimeoutException:
                 print('*'*30)
                 print('timeout')
@@ -180,11 +201,20 @@ class CrawlYhouseDownloaderMiddleware(object):
                 if second == 0:
                     # self.driver.execute_script("window.stop()")
                     self.driver.quit()
+                    display.stop()
                     return self.process_request(request, spider, second=1)
                 else:
                     return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
                 # return HtmlResponse(url=request.url, body=request.url, status=200, encoding="utf-8", request=request)
             # 获取cookies
+            user1 = self.driver.execute_script('return window.navigator.userAgent;')
+            print('user1是', user1)
+            user2 = self.driver.execute_script('return window.outerWidth;')
+            print(user2)
+            user3 = self.driver.execute_script("return window.outerHeight;")
+            print(user3)
+            user4 = self.driver.execute_script("return window.navigator.webdriver;")
+            print(user4)
             try:
                 time.sleep(2)
                 cookies_info = self.driver.get_cookies()
@@ -192,6 +222,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 cookies = cookie_to_dict(cookies_info)
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
                 print('data为', data)
+
             except BaseException as e:
                 print(e)
                 print('休息两秒第二次再请求')
@@ -203,6 +234,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 print('data为', data)
             else:
                 self.driver.quit()
+                display.stop()
             json_data = json.loads(data)
             # 设置会话
             session = Session()
@@ -225,12 +257,14 @@ class CrawlYhouseDownloaderMiddleware(object):
             json_url = 'http://hotel.elong.com/ajax/tmapidetail/gethotelroomsetjvajson'
             html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
             self.driver.quit()
+            display.stop()
             return HtmlResponse(url=request.url, body=html, status=200, encoding="utf-8", request=request)
         except BaseException as e:
             print(e)
             print('代理有问题')
             print(request.url)
             self.driver.quit()
+            display.stop()
             # return self.process_request(request, spider)
             second += 1
             if second <= 2:#这里设置重新获取的机会默认2等于三次
