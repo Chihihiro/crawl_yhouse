@@ -198,9 +198,9 @@ class CrawlYhouseDownloaderMiddleware(object):
             id = re.search('\d+', request.url).group()
             try:
                 self.driver.get(request.url)
-                print(self.driver.get_window_position())
-                print(self.driver.get_window_size())
-                print(self.driver.get_window_rect())
+                print('三连击1', self.driver.get_window_position())
+                print('三连击1', self.driver.get_window_size())
+                print('三连击1', self.driver.get_window_rect())
 
                 # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
             except TimeoutException:
