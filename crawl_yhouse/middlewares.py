@@ -150,6 +150,7 @@ class CrawlYhouseDownloaderMiddleware(object):
         try:
             self.option = ChromeOptions()
             # self.option.add_experimental_option('excludeSwitches', ['ignore-certificate-errors'])
+            self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
             self.prefs = {"profile.managed_default_content_settings.images": 2}
             self.option.add_experimental_option("prefs", self.prefs)
             pp = proxies.get('http')
@@ -160,7 +161,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             # self.option.add_argument('--headless')
             self.option.add_argument('window-size=1920x1024')  # 指定浏览器分辨率
             self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
-            self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
+
 
 
 
