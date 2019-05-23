@@ -126,8 +126,8 @@ class CrawlYhouseDownloaderMiddleware(object):
             pp = ProxyPool().get_proxy().get('http')[7:]
             # pp = '115.225.85.41:4539'
 
-            display = Display(visible=0, size=(800, 600))
-            display.start()
+            # display = Display(visible=0, size=(800, 600))
+            # display.start()
         else:
             pro = [
                 '49.67.98.131:4518',
@@ -153,7 +153,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_argument('--no-sandbox')
             self.option.add_argument('blink-settings=imagesEnabled=false')
             self.option.add_argument('--disable-gpu')
-            # self.option.add_argument('--headless')
+            self.option.add_argument('--headless')
             self.option.add_argument('window-size=800x600')  # 指定浏览器分辨率
             self.option.add_argument("--disable-dev-shm-usage")
             self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
