@@ -133,9 +133,13 @@ class CrawlYhouseDownloaderMiddleware(object):
 
         if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
             pp = ProxyPool().get_proxy().get('http')[7:]
+            # pp = '114.237.231.88:4514'
+
+            display = Display(visible=0, size=(1024, 768))
+            display.start()
         else:
             pro = [
-                '182.34.199.233:4576',
+                '114.237.231.88:4514',
                 # '66666'
             ]
             pp = random.choice(pro)
@@ -144,8 +148,8 @@ class CrawlYhouseDownloaderMiddleware(object):
             'http': pp,
         }
         DR = '/usr/local/bin/chromedriver'
-        display = Display(visible=0, size=(1024, 768))
-        display.start()
+
+
 
         try:
             self.option = ChromeOptions()
@@ -183,10 +187,10 @@ class CrawlYhouseDownloaderMiddleware(object):
 
                 self.driver = Chrome(options=self.option, executable_path=DR)
                 # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
-            self.driver.set_window_position(10, 10)
-            self.driver.set_window_size(945, 1020)
-            self.driver.set_window_rect(10, 10, 945, 1020)
-            self.driver.set_page_load_timeout(20)
+            # self.driver.set_window_position(10, 10)
+            # self.driver.set_window_size(945, 1020)
+            # self.driver.set_window_rect(10, 10, 945, 1020)
+            # self.driver.set_page_load_timeout(20)
             print(self.driver.get_window_position())
             print(self.driver.get_window_size())
             print(self.driver.get_window_rect())

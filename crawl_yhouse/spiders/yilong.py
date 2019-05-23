@@ -87,37 +87,37 @@ class YilongSpider(scrapy.Spider):
             print(info['hotelTipInfo']['hotelId'])
             yilong_id = info['hotelTipInfo']['hotelId']
             if yilong_id ==yhouse_id:
-                # print '请求成功拿到正确id'
-                item = CrawlYhouseItem()
-                host_id = self.to_getid.get(yhouse_id)
-                item['host_id'] = host_id
-                item['hotel_id'] = yhouse_id
-                item['hotel_name'] = info['hotelInventory']['hotelName']
-                rooms_house = info['hotelInventory']['rooms']
-                checkin = info['hotelInventory']['detailRequest']['checkInDate']
-                item['checkin'] = chang_time(checkin)
-                checkout = info['hotelInventory']['detailRequest']['checkOutDate']
-                item['checkout'] = chang_time(checkout)
-                for mother_room in rooms_house:
-                    # 母房型级
-                    item['major_room_id'] = mother_room['roomTypeID']#母房型ID
-                    item['major_room_name'] = mother_room['roomTypeName']
-                    item['bed_type'] = mother_room['bedTypeName']
-                    item['network'] = mother_room['networkDesc']
-                    for room in mother_room['allProductList']:
-                        item['minor_room_name'] = room['ratePlanName']
-                        item['minor_room_id'] = room['sRoomTypeID']
-                        item['breakfast'] = room['breakfastDesc']
-                        item['policy'] = room['cancelRuleDesc']
-                        item['person'] = room['maxPerson']
-                        item['price'] = room['avgPrice']
-                        item['create_time'] = chang_time_all()
-                        item['order_status'] = room['enableBook']
-                        item['sou'] = 0
-                        yield item
+                print('请求成功拿到正确id')
+            #     item = CrawlYhouseItem()
+            #     host_id = self.to_getid.get(yhouse_id)
+            #     item['host_id'] = host_id
+            #     item['hotel_id'] = yhouse_id
+            #     item['hotel_name'] = info['hotelInventory']['hotelName']
+            #     rooms_house = info['hotelInventory']['rooms']
+            #     checkin = info['hotelInventory']['detailRequest']['checkInDate']
+            #     item['checkin'] = chang_time(checkin)
+            #     checkout = info['hotelInventory']['detailRequest']['checkOutDate']
+            #     item['checkout'] = chang_time(checkout)
+            #     for mother_room in rooms_house:
+            #         # 母房型级
+            #         item['major_room_id'] = mother_room['roomTypeID']#母房型ID
+            #         item['major_room_name'] = mother_room['roomTypeName']
+            #         item['bed_type'] = mother_room['bedTypeName']
+            #         item['network'] = mother_room['networkDesc']
+            #         for room in mother_room['allProductList']:
+            #             item['minor_room_name'] = room['ratePlanName']
+            #             item['minor_room_id'] = room['sRoomTypeID']
+            #             item['breakfast'] = room['breakfastDesc']
+            #             item['policy'] = room['cancelRuleDesc']
+            #             item['person'] = room['maxPerson']
+            #             item['price'] = room['avgPrice']
+            #             item['create_time'] = chang_time_all()
+            #             item['order_status'] = room['enableBook']
+            #             item['sou'] = 0
+            #             yield item
             else:
                 print('ID不相同')
-                pass
+            #     pass
             pass
         else:
             pass
