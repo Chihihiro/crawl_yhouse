@@ -164,8 +164,6 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_argument('--disable-gpu')
             # self.option.add_argument('--headless')
             self.option.add_argument('window-size=1920x1024')  # 指定浏览器分辨率
-
-
             self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
 
 
@@ -190,17 +188,28 @@ class CrawlYhouseDownloaderMiddleware(object):
 
                 self.driver = Chrome(options=self.option, executable_path=DR)
                 self.driver.set_page_load_timeout(10)
+                js1 = "Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});"
+                js2 = '''window.navigator.chrome = { runtime: {},  }; '''
+                js3 = '''Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] }); '''
+                js4 = '''Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3], }); '''
+                js5 = '''if (/HeadlessChrome/.pytt(window.navigator.userAgent)) {console.log("Chrome headless detected");}'''
+                self.driver.execute_script(js1)
+                self.driver.execute_script(js2)
+                self.driver.execute_script(js3)
+                self.driver.execute_script(js4)
+                self.driver.execute_script(js5)
                 # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
             # self.driver.set_window_position(10, 10)
             # self.driver.set_window_size(945, 1020)
             # self.driver.set_window_rect(10, 10, 945, 1020)
             # self.driver.set_page_load_timeout(20)
-            print(self.driver.get_window_position())
-            print(self.driver.get_window_size())
-            print(self.driver.get_window_rect())
+
             id = re.search('\d+', request.url).group()
             try:
                 self.driver.get(request.url)
+                print(self.driver.get_window_position())
+                print(self.driver.get_window_size())
+                print(self.driver.get_window_rect())
 
                 # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
             except TimeoutException:
