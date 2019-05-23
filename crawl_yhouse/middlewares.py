@@ -130,7 +130,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             display.start()
         else:
             pro = [
-                '115.225.85.41:4539',
+                '49.67.98.131:4518',
 
             ]
             pp = random.choice(pro)
