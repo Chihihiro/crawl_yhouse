@@ -164,6 +164,8 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_argument('--disable-gpu')
             # self.option.add_argument('--headless')
             self.option.add_argument('window-size=1920x1024')  # 指定浏览器分辨率
+
+
             self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
 
 
@@ -171,6 +173,7 @@ class CrawlYhouseDownloaderMiddleware(object):
 
             if hostname == 'chihiro':
                 self.driver = Chrome(options=self.option)
+                self.driver.set_page_load_timeout(10)
                 # js1 = "Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});"
                 # js2 = '''window.navigator.chrome = { runtime: {},  }; '''
                 # js3 = '''Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] }); '''
@@ -186,6 +189,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             else:
 
                 self.driver = Chrome(options=self.option, executable_path=DR)
+                self.driver.set_page_load_timeout(10)
                 # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
             # self.driver.set_window_position(10, 10)
             # self.driver.set_window_size(945, 1020)
@@ -197,6 +201,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             id = re.search('\d+', request.url).group()
             try:
                 self.driver.get(request.url)
+
                 # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
             except TimeoutException:
                 print('*'*30)
