@@ -166,22 +166,22 @@ class CrawlYhouseDownloaderMiddleware(object):
 
             if hostname == 'chihiro':
                 self.driver = Chrome(options=self.option)
-                js1 = "Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});"
-                js2 = '''window.navigator.chrome = { runtime: {},  }; '''
-                js3 = '''Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] }); '''
-                js4 = '''Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3], }); '''
-                js5 = '''if (/HeadlessChrome/.pytt(window.navigator.userAgent)) {console.log("Chrome headless detected");}'''
-                self.driver.execute_script(js1)
-                self.driver.execute_script(js2)
-                self.driver.execute_script(js3)
-                self.driver.execute_script(js4)
-                self.driver.execute_script(js5)
+                # js1 = "Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});"
+                # js2 = '''window.navigator.chrome = { runtime: {},  }; '''
+                # js3 = '''Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] }); '''
+                # js4 = '''Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3], }); '''
+                # js5 = '''if (/HeadlessChrome/.pytt(window.navigator.userAgent)) {console.log("Chrome headless detected");}'''
+                # self.driver.execute_script(js1)
+                # self.driver.execute_script(js2)
+                # self.driver.execute_script(js3)
+                # self.driver.execute_script(js4)
+                # self.driver.execute_script(js5)
 
                 # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
             else:
 
                 self.driver = Chrome(options=self.option, executable_path=DR)
-                self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
+                # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
             self.driver.set_window_position(10, 10)
             self.driver.set_window_size(945, 1020)
             self.driver.set_window_rect(10, 10, 945, 1020)
