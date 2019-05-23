@@ -109,15 +109,6 @@ class CrawlYhouseDownloaderMiddleware(object):
     #     self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
     #     self.prefs = {"profile.managed_default_content_settings.images": 2}
     #     self.option.add_experimental_option("prefs", self.prefs)
-        # self.option.add_argument(f"--proxy-server=http://{proxies.get('http')}")
-        # # self.option.add_argument('--headless')
-        # self.driver = Chrome(options=self.option)
-        # self.option.add_argument(f"--proxy-server=http://{proxies.get('http')}")
-        # option.add_argument('--headless')
-        # self.wait = WebDriverWait(self.driver, 3)
-        # self.driver = Chrome(options=self.option)
-        # self.driver = Chrome()  # 模拟浏览器
-        # self.wait = WebDriverWait(self.driver, 10)
 
 
     @classmethod
@@ -135,7 +126,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             pp = ProxyPool().get_proxy().get('http')[7:]
             # pp = '115.225.85.41:4539'
 
-            display = Display(visible=1, size=(1024, 768))
+            display = Display(visible=0, size=(1024, 768))
             display.start()
         else:
             pro = [
@@ -188,16 +179,16 @@ class CrawlYhouseDownloaderMiddleware(object):
 
                 self.driver = Chrome(options=self.option, executable_path=DR)
                 self.driver.set_page_load_timeout(10)
-                js1 = "Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});"
-                js2 = '''window.navigator.chrome = { runtime: {},  }; '''
-                js3 = '''Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] }); '''
-                js4 = '''Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3], }); '''
-                js5 = '''if (/HeadlessChrome/.pytt(window.navigator.userAgent)) {console.log("Chrome headless detected");}'''
-                self.driver.execute_script(js1)
-                self.driver.execute_script(js2)
-                self.driver.execute_script(js3)
-                self.driver.execute_script(js4)
-                self.driver.execute_script(js5)
+                # js1 = "Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});"
+                # js2 = '''window.navigator.chrome = { runtime: {},  }; '''
+                # js3 = '''Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] }); '''
+                # js4 = '''Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3], }); '''
+                # js5 = '''if (/HeadlessChrome/.pytt(window.navigator.userAgent)) {console.log("Chrome headless detected");}'''
+                # self.driver.execute_script(js1)
+                # self.driver.execute_script(js2)
+                # self.driver.execute_script(js3)
+                # self.driver.execute_script(js4)
+                # self.driver.execute_script(js5)
                 # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
             # self.driver.set_window_position(10, 10)
             # self.driver.set_window_size(945, 1020)
