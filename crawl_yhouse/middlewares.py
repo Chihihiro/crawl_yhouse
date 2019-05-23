@@ -132,15 +132,15 @@ class CrawlYhouseDownloaderMiddleware(object):
         print(hostname)
 
         if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
-            pp = ProxyPool().get_proxy().get('http')[7:]
-            # pp = '114.237.231.88:4514'
+            # pp = ProxyPool().get_proxy().get('http')[7:]
+            pp = '115.225.85.41:4539'
 
             display = Display(visible=0, size=(1024, 768))
             display.start()
         else:
             pro = [
-                '114.237.231.88:4514',
-                # '66666'
+                '115.225.85.41:4539',
+
             ]
             pp = random.choice(pro)
         print('本次使用的代理为', pp)
@@ -227,7 +227,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             try:
                 time.sleep(2)
                 cookies_info = self.driver.get_cookies()
-                # print(cookies_info)
+                print('cookies id 为：', cookies_info)
                 cookies = cookie_to_dict(cookies_info)
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
                 print('data为', data)
@@ -237,7 +237,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 print('休息两秒第二次再请求')
                 time.sleep(2)
                 cookies_info = self.driver.get_cookies()
-                print(cookies_info)
+                print('cookies id 为：', cookies_info)
                 cookies = cookie_to_dict(cookies_info)
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
                 print('data为', data)
