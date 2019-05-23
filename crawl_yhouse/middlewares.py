@@ -237,7 +237,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 print('休息两秒第二次再请求')
                 time.sleep(2)
                 cookies_info = self.driver.get_cookies()
-                # print(cookies_info)
+                print(cookies_info)
                 cookies = cookie_to_dict(cookies_info)
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
                 print('data为', data)
