@@ -106,7 +106,9 @@ class CrawlYhouseDownloaderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
-    # def __init__(self):
+    def __init__(self):
+        display = Display(visible=0, size=(800, 600))
+        display.start()
     #     self.option = ChromeOptions()
     #     self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
     #     self.prefs = {"profile.managed_default_content_settings.images": 2}
@@ -130,8 +132,7 @@ class CrawlYhouseDownloaderMiddleware(object):
         #
         #
         # else:
-        display = Display(visible=0, size=(800, 600))
-        display.start()
+
         #     pro = [
         #         '112.84.210.14:4560',
         #
