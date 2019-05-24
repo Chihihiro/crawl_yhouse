@@ -20,6 +20,8 @@ from crawl_yhouse.proxy_pool import *
 import random
 import socket
 from crawl_yhouse.user_agent import user_agent
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class CrawlYhouseSpiderMiddleware(object):
@@ -95,7 +97,7 @@ def change_args(x):
 
 
 from pyvirtualdisplay import Display
-
+from selenium.webdriver.common.by import By
 
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
@@ -126,11 +128,12 @@ class CrawlYhouseDownloaderMiddleware(object):
             pp = ProxyPool().get_proxy().get('http')[7:]
             # pp = '115.225.85.41:4539'
 
-            # display = Display(visible=0, size=(800, 600))
-            # display.start()
+
         else:
+            display = Display(visible=0, size=(800, 600))
+            display.start()
             pro = [
-                '116.54.210.119:4531',
+                '112.84.210.14:4560',
 
             ]
             pp = random.choice(pro)
@@ -149,6 +152,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.prefs = {"profile.managed_default_content_settings.images": 2}
             self.option.add_experimental_option("prefs", self.prefs)
             pp = proxies.get('http')
+
             self.option.add_argument("--proxy-server=http://%s" %pp)
             self.option.add_argument('--no-sandbox')
             self.option.add_argument('blink-settings=imagesEnabled=false')
@@ -165,6 +169,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             if hostname == 'chihiro':
                 self.driver = Chrome(options=self.option)
                 self.driver.set_page_load_timeout(10)
+                self.wait = WebDriverWait(self.driver, 10)
                 # js1 = "Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});"
                 # js2 = '''window.navigator.chrome = { runtime: {},  }; '''
                 # js3 = '''Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] }); '''
@@ -180,22 +185,9 @@ class CrawlYhouseDownloaderMiddleware(object):
             else:
 
                 self.driver = Chrome(options=self.option, executable_path=DR)
-                self.driver.set_page_load_timeout(10)
-                # js1 = "Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});"
-                # js2 = '''window.navigator.chrome = { runtime: {},  }; '''
-                # js3 = '''Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] }); '''
-                # js4 = '''Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3], }); '''
-                # js5 = '''if (/HeadlessChrome/.pytt(window.navigator.userAgent)) {console.log("Chrome headless detected");}'''
-                # self.driver.execute_script(js1)
-                # self.driver.execute_script(js2)
-                # self.driver.execute_script(js3)
-                # self.driver.execute_script(js4)
-                # self.driver.execute_script(js5)
-                # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
-            # self.driver.set_window_position(10, 10)
-            # self.driver.set_window_size(945, 1020)
-            # self.driver.set_window_rect(10, 10, 945, 1020)
-            # self.driver.set_page_load_timeout(20)
+                self.driver.set_page_load_timeout(15)
+                self.wait = WebDriverWait(self.driver, 10)
+
 
             id = re.search('\d+', request.url).group()
             try:
@@ -211,7 +203,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 print(second)
                 self.driver.quit()
                 if second == 0:
-                    # self.driver.execute_script("window.stop()")
+
 
                     # display.stop()
                     return self.process_request(request, spider, second=1)
@@ -232,6 +224,9 @@ class CrawlYhouseDownloaderMiddleware(object):
                 cookies_info = self.driver.get_cookies()
                 print('cookies id 为：', cookies_info)
                 cookies = cookie_to_dict(cookies_info)
+                self.wait.until(  # 帐号输入框
+                    EC.presence_of_element_located((By.CSS_SELECTOR, '#roomSetContainer'))
+                )
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
                 print('data为', data)
 
@@ -242,6 +237,9 @@ class CrawlYhouseDownloaderMiddleware(object):
                 cookies_info = self.driver.get_cookies()
                 print('cookies id 为：', cookies_info)
                 cookies = cookie_to_dict(cookies_info)
+                self.wait.until(  # 帐号输入框
+                    EC.presence_of_element_located((By.CSS_SELECTOR, '#roomSetContainer'))
+                )
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
                 print('data为', data)
             else:
@@ -268,7 +266,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 'Content-Length': "521"}
             json_url = 'http://hotel.elong.com/ajax/tmapidetail/gethotelroomsetjvajson'
             html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
-            self.driver.quit()
+            self.driver.quit()#这是最后一个开关
             # display.stop()
             return HtmlResponse(url=request.url, body=html, status=200, encoding="utf-8", request=request)
         except BaseException as e:
