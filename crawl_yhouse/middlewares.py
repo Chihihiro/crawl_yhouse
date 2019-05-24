@@ -124,23 +124,23 @@ class CrawlYhouseDownloaderMiddleware(object):
         hostname = socket.gethostname()
         print(hostname)
 
-        if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
-            pp = ProxyPool().get_proxy().get('http')[7:]
-            # pp = '115.225.85.41:4539'
-
-
-        else:
-            display = Display(visible=0, size=(800, 600))
-            display.start()
-            pro = [
-                '112.84.210.14:4560',
-
-            ]
-            pp = random.choice(pro)
-        print('本次使用的代理为', pp)
-        proxies = {
-            'http': pp,
-        }
+        # if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
+        #     pp = ProxyPool().get_proxy().get('http')[7:]
+        #     # pp = '115.225.85.41:4539'
+        #
+        #
+        # else:
+        display = Display(visible=0, size=(800, 600))
+        display.start()
+        #     pro = [
+        #         '112.84.210.14:4560',
+        #
+        #     ]
+        #     pp = random.choice(pro)
+        # print('本次使用的代理为', pp)
+        # proxies = {
+        #     'http': pp,
+        # }
         DR = '/usr/local/bin/chromedriver'
 
 
@@ -151,9 +151,8 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
             self.prefs = {"profile.managed_default_content_settings.images": 2}
             self.option.add_experimental_option("prefs", self.prefs)
-            pp = proxies.get('http')
-
-            self.option.add_argument("--proxy-server=http://%s" %pp)
+            # pp = proxies.get('http')
+            # self.option.add_argument("--proxy-server=http://%s" %pp)
             self.option.add_argument('--no-sandbox')
             self.option.add_argument('blink-settings=imagesEnabled=false')
             self.option.add_argument('--disable-gpu')
@@ -265,7 +264,8 @@ class CrawlYhouseDownloaderMiddleware(object):
                 'Connection': "keep-alive",
                 'Content-Length': "521"}
             json_url = 'http://hotel.elong.com/ajax/tmapidetail/gethotelroomsetjvajson'
-            html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
+            # html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
+            html = session.post(json_url, headers=header, data=json_data).text
             self.driver.quit()#这是最后一个开关
             # display.stop()
             return HtmlResponse(url=request.url, body=html, status=200, encoding="utf-8", request=request)
