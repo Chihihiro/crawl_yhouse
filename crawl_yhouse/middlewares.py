@@ -126,22 +126,20 @@ class CrawlYhouseDownloaderMiddleware(object):
         hostname = socket.gethostname()
         print(hostname)
 
-        # if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
-        #     pp = ProxyPool().get_proxy().get('http')[7:]
-        #     # pp = '115.225.85.41:4539'
-        #
-        #
-        # else:
+        if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
+            pp = ProxyPool().get_proxy().get('http')[7:]
+            # pp = '115.225.85.41:4539'
+        else:
 
-        #     pro = [
-        #         '112.84.210.14:4560',
-        #
-        #     ]
-        #     pp = random.choice(pro)
-        # print('本次使用的代理为', pp)
-        # proxies = {
-        #     'http': pp,
-        # }
+            pro = [
+                '112.84.210.14:4560',
+
+            ]
+            pp = random.choice(pro)
+        print('本次使用的代理为', pp)
+        proxies = {
+            'http': pp,
+        }
         DR = '/usr/local/bin/chromedriver'
 
 
@@ -153,7 +151,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.prefs = {"profile.managed_default_content_settings.images": 2}
             self.option.add_experimental_option("prefs", self.prefs)
             # pp = proxies.get('http')
-            # self.option.add_argument("--proxy-server=http://%s" %pp)
+            self.option.add_argument("--proxy-server=http://%s" %pp)
             self.option.add_argument('--no-sandbox')
             self.option.add_argument('blink-settings=imagesEnabled=false')
             self.option.add_argument('--disable-gpu')
@@ -165,32 +163,6 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.driver = Chrome(executable_path=DR, options=self.option)
             self.driver.set_page_load_timeout(15)
             self.wait = WebDriverWait(self.driver, 10)
-
-
-
-            # if hostname == 'chihiro':
-            #     self.driver = Chrome(options=self.option)
-            #     self.driver.set_page_load_timeout(10)
-            #     self.wait = WebDriverWait(self.driver, 10)
-            #     # js1 = "Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});"
-            #     # js2 = '''window.navigator.chrome = { runtime: {},  }; '''
-            #     # js3 = '''Object.defineProperty(navigator, 'languages', { get: () => ['en-US', 'en'] }); '''
-            #     # js4 = '''Object.defineProperty(navigator, 'plugins', { get: () => [1, 2, 3], }); '''
-            #     # js5 = '''if (/HeadlessChrome/.pytt(window.navigator.userAgent)) {console.log("Chrome headless detected");}'''
-            #     # self.driver.execute_script(js1)
-            #     # self.driver.execute_script(js2)
-            #     # self.driver.execute_script(js3)
-            #     # self.driver.execute_script(js4)
-            #     # self.driver.execute_script(js5)
-            #
-            #     # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
-            # else:
-            #     self.driver = Chrome(executable_path=DR, options=self.option)
-            #     self.driver.set_page_load_timeout(15)
-            #     self.wait = WebDriverWait(self.driver, 10)
-
-
-
             id = re.search('\d+', request.url).group()
             try:
                 self.driver.get(request.url)
@@ -267,10 +239,9 @@ class CrawlYhouseDownloaderMiddleware(object):
                 'Connection': "keep-alive",
                 'Content-Length': "521"}
             json_url = 'http://hotel.elong.com/ajax/tmapidetail/gethotelroomsetjvajson'
-            # html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
-            html = session.post(json_url, headers=header, data=json_data).text
+            html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
+            # html = session.post(json_url, headers=header, data=json_data).text
             self.driver.quit()#这是最后一个开关
-            # display.stop()
             return HtmlResponse(url=request.url, body=html, status=200, encoding="utf-8", request=request)
         except BaseException as e:
             print(e)
