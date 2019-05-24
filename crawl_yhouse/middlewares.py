@@ -130,7 +130,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             # display.start()
         else:
             pro = [
-                '49.67.98.131:4518',
+                '116.54.210.119:4531',
 
             ]
             pp = random.choice(pro)
@@ -153,9 +153,10 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_argument('--no-sandbox')
             self.option.add_argument('blink-settings=imagesEnabled=false')
             self.option.add_argument('--disable-gpu')
-            self.option.add_argument('--headless')
+            # self.option.add_argument('--headless')
             self.option.add_argument('window-size=800x600')  # 指定浏览器分辨率
             self.option.add_argument("--disable-dev-shm-usage")
+            self.option.add_argument("load-extension=C:\\Users\\xiaod\\Desktop\\Chrome_js")
             self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
 
 
@@ -208,9 +209,10 @@ class CrawlYhouseDownloaderMiddleware(object):
                 print('*'*30)
                 print('timeout')
                 print(second)
+                self.driver.quit()
                 if second == 0:
                     # self.driver.execute_script("window.stop()")
-                    self.driver.quit()
+
                     # display.stop()
                     return self.process_request(request, spider, second=1)
                 else:
@@ -224,7 +226,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             user3 = self.driver.execute_script("return window.outerHeight;")
             print(user3)
             user4 = self.driver.execute_script("return window.navigator.webdriver;")
-            print('是否绕过无头检测',user4)
+            print('是否绕过无头检测', user4)
             try:
                 time.sleep(2)
                 cookies_info = self.driver.get_cookies()
