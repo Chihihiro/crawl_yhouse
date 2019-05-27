@@ -106,9 +106,9 @@ class CrawlYhouseDownloaderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
-    # def __init__(self):
-    #     display = Display(visible=0, size=(800, 600))
-    #     display.start()
+    def __init__(self):
+        self.display = Display(visible=0, size=(800, 600))
+        self.display.start()
     #     self.option = ChromeOptions()
     #     self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
     #     self.prefs = {"profile.managed_default_content_settings.images": 2}
@@ -180,6 +180,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                     # display.stop()
                     return self.process_request(request, spider, second=1)
                 else:
+                    self.display.stop()
                     return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
                 # return HtmlResponse(url=request.url, body=request.url, status=200, encoding="utf-8", request=request)
 
@@ -225,6 +226,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 # print('data为', data)
             # else:
             self.driver.quit()
+            self.display.stop()
                 # display.stop()
             json_data = json.loads(data)
             # 设置会话
@@ -249,18 +251,20 @@ class CrawlYhouseDownloaderMiddleware(object):
             html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
             # html = session.post(json_url, headers=header, data=json_data).text
             self.driver.quit()#这是最后一个开关
+            self.display.stop()
             return HtmlResponse(url=request.url, body=html, status=200, encoding="utf-8", request=request)
         except BaseException as e:
             print(e)
             print('代理有问题')
             print(request.url)
             self.driver.quit()
-            # display.stop()
+            self.display.stop()
             # return self.process_request(request, spider)
             second += 1
             if second <= 2:#这里设置重新获取的机会默认2等于三次
                 # print('再给最后一次机会')
                 return self.process_request(request, spider, second=second)
+
             return HtmlResponse(url=request.url, body=request.url, status=201, encoding="utf-8", request=request)
             # return response
         # else:
