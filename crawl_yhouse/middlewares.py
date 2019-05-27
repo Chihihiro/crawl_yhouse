@@ -135,7 +135,7 @@ class CrawlYhouseDownloaderMiddleware(object):
 
             pro = [
 
-                '106.56.247.140:4581'
+                '223.215.187.252:4516'
             ]
             pp = random.choice(pro)
         print('本次使用的代理为', pp)
@@ -153,7 +153,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.prefs = {"profile.managed_default_content_settings.images": 2}
             self.option.add_experimental_option("prefs", self.prefs)
             # pp = proxies.get('http')
-            # self.option.add_argument("--proxy-server=http://%s" %pp)
+            self.option.add_argument("--proxy-server=http://%s" %pp)
             self.option.add_argument('--no-sandbox')
             self.option.add_argument('blink-settings=imagesEnabled=false')
             self.option.add_argument('--disable-gpu')
@@ -161,7 +161,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             # self.option.add_argument('window-size=800x600')  # 指定浏览器分辨率
             self.option.add_argument("--disable-dev-shm-usage")
             # self.option.add_argument("load-extension=C:\\Users\\xiaod\\Desktop\\Chrome_js")
-            # self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
+            self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
             if hostname == 'chihiro':
                 self.driver = Chrome(options=self.option)
             else:
@@ -181,6 +181,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 print('timeout')
                 print(second)
                 self.driver.quit()
+                # 获取cookies
                 if second == 0:
                     # display.stop()
                     return self.process_request(request, spider, second=1)
@@ -191,14 +192,32 @@ class CrawlYhouseDownloaderMiddleware(object):
 
             user4 = self.driver.execute_script("return window.navigator.webdriver;")
             print('是否绕过无头检测', user4)
-            # try:
-            # time.sleep(2)#中间不能加延迟了反扒更厉害了
-            cookies_info = self.driver.get_cookies()
-            print('cookies id 为：', cookies_info)
-            cookies = cookie_to_dict(cookies_info)
-            self.wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list'))
-            )# 查找roomSetContainer 后立马请求
+
+            try:
+                # time.sleep(2)#中间不能加延迟了反扒更厉害了
+                cookies_info = self.driver.get_cookies()
+                # print('cookies id 为：', cookies_info)
+                cookies = cookie_to_dict(cookies_info)
+                self.wait.until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list'))
+                )# 查找roomSetContainer 后立马请求
+                data = self.driver.execute_script('return window.localStorage.roomparams;')
+                print('data为', data)
+                if data is None:
+                    for i in range(2):
+                        data = self.driver.execute_script('return window.localStorage.roomparams;')
+                        time.sleep(0.4)
+                        print('data为', data)
+                        if data is not None:
+                            print('多次请求尝试:', i)
+                            break
+                else:
+                    print('data一次请求成功')
+            except BaseException as e:
+                print(e)
+
+            else:
+                self.driver.quit()
             # time.sleep(1)
             # document = self.driver.execute_script('return document.querySelector("#roomSetContainer")')
             # print(document.text)
@@ -210,28 +229,13 @@ class CrawlYhouseDownloaderMiddleware(object):
             # else:
             #     print('没有房间直接跳过')
             #     return None
-            data = self.driver.execute_script('return window.localStorage.roomparams;')
-            print('data为', data)
 
-
-            # if data is None:
-            #     for i in range(2):
-            #         data = self.driver.execute_script('return window.localStorage.roomparams;')
-            #         time.sleep(0.4)
-            #         print('data为', data)
-            #         if data is not None:
-            #             print('多次请求尝试:', i)
-            #             break
-            # else:
-            #     print('data一次请求成功')
 
 
             # else:
             if data is None:
                 print('一直没有请求到', request.url)
-            self.driver.quit()
-            # self.display.stop()
-            # display.stop()
+
             json_data = json.loads(data)
             # 设置会话
             session = Session()
