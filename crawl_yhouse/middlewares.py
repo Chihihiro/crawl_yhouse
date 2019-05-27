@@ -196,12 +196,20 @@ class CrawlYhouseDownloaderMiddleware(object):
             # time.sleep(5)
             if room:
                 print('找到房间:', request.url)
-                time.sleep(1)
+
             else:
                 print('没有房间直接跳过')
                 return None
-            data = self.driver.execute_script('return window.localStorage.roomparams;')
-            print('data为', data)
+            # data = self.driver.execute_script('return window.localStorage.roomparams;')
+
+            for i in range(3):
+                data = self.driver.execute_script('return window.localStorage.roomparams;')
+                time.sleep(1)
+                print('data为', data)
+                if data is not None:
+                    print('多次请求尝试:', i)
+                    break
+
 
             # except BaseException as e:
             #     print(e)
