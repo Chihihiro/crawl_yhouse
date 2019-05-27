@@ -135,7 +135,7 @@ class CrawlYhouseDownloaderMiddleware(object):
 
             pro = [
 
-                '223.215.187.252:4516'
+                '182.247.36.17:4573'
             ]
             pp = random.choice(pro)
         print('本次使用的代理为', pp)
@@ -143,6 +143,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             'http': pp,
         }
         DR = '/usr/local/bin/chromedriver'
+        request.meta["proxy"] = "http://"+pp
 
 
 
@@ -152,8 +153,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
             self.prefs = {"profile.managed_default_content_settings.images": 2}
             self.option.add_experimental_option("prefs", self.prefs)
-            # pp = proxies.get('http')
-            self.option.add_argument("--proxy-server=%s" %pp)
+
             self.option.add_argument('--no-sandbox')
             self.option.add_argument('blink-settings=imagesEnabled=false')
             self.option.add_argument('--disable-gpu')
@@ -162,6 +162,8 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_argument("--disable-dev-shm-usage")
             # self.option.add_argument("load-extension=C:\\Users\\xiaod\\Desktop\\Chrome_js")
             self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
+            # self.option.add_argument("--proxy-server=%s" % pp)
+            self.option.add_argument('-proxy-server=http://' + pp)
             if hostname == 'chihiro':
                 self.driver = Chrome(options=self.option)
             else:
