@@ -198,8 +198,8 @@ class CrawlYhouseDownloaderMiddleware(object):
                 EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list'))
             )# 查找roomSetContainer 后立马请求
             # time.sleep(1)
-            document = self.driver.execute_script('return document.querySelector("#roomSetContainer")')
-            print(document.text)
+            # document = self.driver.execute_script('return document.querySelector("#roomSetContainer")')
+            # print(document.text)
             # file = open(id+".html", "w", encoding="utf-8")
             # file.write(document.text)
             # if room:
@@ -209,10 +209,11 @@ class CrawlYhouseDownloaderMiddleware(object):
             #     print('没有房间直接跳过')
             #     return None
             data = self.driver.execute_script('return window.localStorage.roomparams;')
+            print('data为', data)
 
 
             if data is None:
-                for i in range(5):
+                for i in range(2):
                     data = self.driver.execute_script('return window.localStorage.roomparams;')
                     time.sleep(0.4)
                     print('data为', data)
@@ -222,18 +223,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             else:
                 print('data一次请求成功')
 
-            # except BaseException as e:
-            #     print(e)
-                # print('休息两秒第二次再请求')
-                # time.sleep(2)
-                # cookies_info = self.driver.get_cookies()
-                # print('cookies id 为：', cookies_info)
-                # cookies = cookie_to_dict(cookies_info)
-                # self.wait.until(  # 帐号输入框
-                #     EC.presence_of_element_located((By.CSS_SELECTOR, '#roomSetContainer'))
-                # )
-                # data = self.driver.execute_script('return window.localStorage.roomparams;')
-                # print('data为', data)
+
             # else:
             if data is None:
                 print('一直没有请求到', request.url)
