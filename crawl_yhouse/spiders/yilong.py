@@ -38,13 +38,13 @@ class YilongSpider(scrapy.Spider):
     # allowed_domains = ['http://hotel.elong.com/92494775/']
     start_urls = [
                   # 'http://hotel.elong.com/52001128/',
-                  'http://hotel.elong.com/50301037/',
+                  # 'http://hotel.elong.com/50301037/',
                   # 'http://hotel.elong.com/90684208/',
-                  # 'http://hotel.elong.com/40201069/',
+                  'http://hotel.elong.com/50301037/',
                   # 'http://hotel.elong.com/10201185/',
-                  # 'http://hotel.elong.com/40201010/',
-                  # 'http://hotel.elong.com/40201952/',
-                  # 'http://hotel.elong.com/91855173/',
+                  'http://hotel.elong.com/40201010/',
+                  'http://hotel.elong.com/40201952/',
+                  'http://hotel.elong.com/91855173/',
                   # 'http://hotel.elong.com/10201307/',
                   # 'http://hotel.elong.com/40201044/',
                   # 'http://hotel.elong.com/10201082/',

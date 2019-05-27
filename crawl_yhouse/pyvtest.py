@@ -29,11 +29,16 @@
 # #         pass
 # from selenium.webdriver import Chrome
 # from selenium.webdriver import ChromeOptions
-# from pyvirtualdisplay import Display
-# DR = '/usr/local/bin/chromedriver'
-# display = Display(visible=0, size=(1024, 768))
-# display.start()
-# driver = Chrome(executable_path=DR)
-# driver.get('http://www.baidu.com')
-# print(driver.title)
+# # from pyvirtualdisplay import Display
+# # DR = '/usr/local/bin/chromedriver'
+# # display = Display(visible=0, size=(1024, 768))
+# # display.start()
+# # driver = Chrome(executable_path=DR)
+# # driver = Chrome()
+# option = ChromeOptions()
+# # self.option.add_experimental_option('excludeSwitches', ['ignore-certificate-errors'])
+# option.add_experimental_option('excludeSwitches', ['enable-automation'])
+# driver = Chrome(options=option)
+# driver.get('http://hotel.elong.com/50301037/')
+# # print(driver.title)
 # display.stop()
