@@ -153,40 +153,40 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.prefs = {"profile.managed_default_content_settings.images": 2}
             self.option.add_experimental_option("prefs", self.prefs)
             # pp = proxies.get('http')
-            self.option.add_argument("--proxy-server=http://%s" %pp)
+            # self.option.add_argument("--proxy-server=http://%s" %pp)
             self.option.add_argument('--no-sandbox')
             self.option.add_argument('blink-settings=imagesEnabled=false')
-            # self.option.add_argument('--disable-gpu')
+            self.option.add_argument('--disable-gpu')
             # self.option.add_argument('--headless')
             # self.option.add_argument('window-size=800x600')  # 指定浏览器分辨率
-            # self.option.add_argument("--disable-dev-shm-usage")
+            self.option.add_argument("--disable-dev-shm-usage")
             # self.option.add_argument("load-extension=C:\\Users\\xiaod\\Desktop\\Chrome_js")
             # self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
             if hostname == 'chihiro':
                 self.driver = Chrome(options=self.option)
             else:
                 self.driver = Chrome(executable_path=DR, options=self.option)
-            # self.driver.set_page_load_timeout(10)
+            self.driver.set_page_load_timeout(10)
             self.wait = WebDriverWait(self.driver, 10)
             id = re.search('\d+', request.url).group()
-            # try:
-            time.sleep(2)
-            self.driver.get(request.url)
+            try:
+                time.sleep(2)
+                self.driver.get(request.url)
                 # print('三连击1', self.driver.get_window_position())
                 # print('三连击1', self.driver.get_window_size())
                 # print('三连击1', self.driver.get_window_rect())
                 # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
-            # except TimeoutException:
-            #     print('*'*30)
-            #     print('timeout')
-            #     print(second)
-            #     self.driver.quit()
-            #     if second == 0:
-            #         # display.stop()
-            #         return self.process_request(request, spider, second=1)
-            #     else:
-            #         # self.display.stop()
-            #         return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
+            except TimeoutException:
+                print('*'*30)
+                print('timeout')
+                print(second)
+                self.driver.quit()
+                if second == 0:
+                    # display.stop()
+                    return self.process_request(request, spider, second=1)
+                else:
+                    # self.display.stop()
+                    return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
                 # return HtmlResponse(url=request.url, body=request.url, status=200, encoding="utf-8", request=request)
 
             user4 = self.driver.execute_script("return window.navigator.webdriver;")
@@ -252,8 +252,8 @@ class CrawlYhouseDownloaderMiddleware(object):
                 'Connection': "keep-alive",
                 'Content-Length': "521"}
             json_url = 'http://hotel.elong.com/ajax/tmapidetail/gethotelroomsetjvajson'
-            html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
-            # html = session.post(json_url, headers=header, data=json_data).text
+            # html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
+            html = session.post(json_url, headers=header, data=json_data).text
             # self.driver.quit()#这是最后一个开关
             # self.display.stop()
             return HtmlResponse(url=request.url, body=html, status=200, encoding="utf-8", request=request)
