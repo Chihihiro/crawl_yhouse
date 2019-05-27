@@ -106,9 +106,9 @@ class CrawlYhouseDownloaderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
-    def __init__(self):
-        self.display = Display(visible=0, size=(800, 600))
-        self.display.start()
+    # def __init__(self):
+    #     self.display = Display(visible=0, size=(800, 600))
+    #     self.display.start()
     #     self.option = ChromeOptions()
     #     self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
     #     self.prefs = {"profile.managed_default_content_settings.images": 2}
@@ -128,12 +128,12 @@ class CrawlYhouseDownloaderMiddleware(object):
         hostname = socket.gethostname()
         print(hostname)
 
-        if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
+        if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx088'):
             pp = ProxyPool().get_proxy().get('http')[7:]
         else:
 
             pro = [
-                '61.180.52.90:4563',
+                '115.218.232.18:4564',
             ]
             pp = random.choice(pro)
         print('本次使用的代理为', pp)
@@ -205,9 +205,9 @@ class CrawlYhouseDownloaderMiddleware(object):
                 return None
             data = self.driver.execute_script('return window.localStorage.roomparams;')
             if data is None:
-                for i in range(10):
+                for i in range(5):
                     data = self.driver.execute_script('return window.localStorage.roomparams;')
-                    time.sleep(0.3)
+                    time.sleep(0.4)
                     print('data为', data)
                     if data is not None:
                         print('多次请求尝试:', i)
@@ -230,7 +230,6 @@ class CrawlYhouseDownloaderMiddleware(object):
             # else:
             if data is None:
                 print('一直没有请求到', request.url)
-                return None
             self.driver.quit()
             # self.display.stop()
             # display.stop()
@@ -256,7 +255,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             json_url = 'http://hotel.elong.com/ajax/tmapidetail/gethotelroomsetjvajson'
             html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
             # html = session.post(json_url, headers=header, data=json_data).text
-            self.driver.quit()#这是最后一个开关
+            # self.driver.quit()#这是最后一个开关
             # self.display.stop()
             return HtmlResponse(url=request.url, body=html, status=200, encoding="utf-8", request=request)
         except BaseException as e:
