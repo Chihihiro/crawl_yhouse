@@ -153,7 +153,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.prefs = {"profile.managed_default_content_settings.images": 2}
             self.option.add_experimental_option("prefs", self.prefs)
             # pp = proxies.get('http')
-            self.option.add_argument("--proxy-server=http://%s" %pp)
+            self.option.add_argument("--proxy-server=%s" %pp)
             self.option.add_argument('--no-sandbox')
             self.option.add_argument('blink-settings=imagesEnabled=false')
             self.option.add_argument('--disable-gpu')
