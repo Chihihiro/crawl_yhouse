@@ -166,27 +166,27 @@ class CrawlYhouseDownloaderMiddleware(object):
                 self.driver = Chrome(options=self.option)
             else:
                 self.driver = Chrome(executable_path=DR, options=self.option)
-            self.driver.set_page_load_timeout(10)
+            # self.driver.set_page_load_timeout(10)
             self.wait = WebDriverWait(self.driver, 10)
             id = re.search('\d+', request.url).group()
-            try:
-                time.sleep(2)
-                self.driver.get(request.url)
+            # try:
+            time.sleep(2)
+            self.driver.get(request.url)
                 # print('三连击1', self.driver.get_window_position())
                 # print('三连击1', self.driver.get_window_size())
                 # print('三连击1', self.driver.get_window_rect())
                 # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
-            except TimeoutException:
-                print('*'*30)
-                print('timeout')
-                print(second)
-                self.driver.quit()
-                if second == 0:
-                    # display.stop()
-                    return self.process_request(request, spider, second=1)
-                else:
-                    # self.display.stop()
-                    return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
+            # except TimeoutException:
+            #     print('*'*30)
+            #     print('timeout')
+            #     print(second)
+            #     self.driver.quit()
+            #     if second == 0:
+            #         # display.stop()
+            #         return self.process_request(request, spider, second=1)
+            #     else:
+            #         # self.display.stop()
+            #         return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
                 # return HtmlResponse(url=request.url, body=request.url, status=200, encoding="utf-8", request=request)
 
             user4 = self.driver.execute_script("return window.navigator.webdriver;")
