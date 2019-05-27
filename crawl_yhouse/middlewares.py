@@ -133,7 +133,8 @@ class CrawlYhouseDownloaderMiddleware(object):
         else:
 
             pro = [
-                '115.218.232.18:4564',
+
+                '220.189.105.160:4536'
             ]
             pp = random.choice(pro)
         print('本次使用的代理为', pp)
@@ -193,17 +194,23 @@ class CrawlYhouseDownloaderMiddleware(object):
             cookies_info = self.driver.get_cookies()
             print('cookies id 为：', cookies_info)
             cookies = cookie_to_dict(cookies_info)
-            room = self.wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '#roomSetContainer'))
+            self.wait.until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list'))
             )# 查找roomSetContainer 后立马请求
-            # time.sleep(5)
-            if room:
-                print('找到房间:', request.url)
-
-            else:
-                print('没有房间直接跳过')
-                return None
+            # time.sleep(1)
+            document = self.driver.execute_script('return document.querySelector("#roomSetContainer")')
+            print(document.text)
+            # file = open(id+".html", "w", encoding="utf-8")
+            # file.write(document.text)
+            # if room:
+            #     print('找到房间:', request.url)
+            #
+            # else:
+            #     print('没有房间直接跳过')
+            #     return None
             data = self.driver.execute_script('return window.localStorage.roomparams;')
+
+
             if data is None:
                 for i in range(5):
                     data = self.driver.execute_script('return window.localStorage.roomparams;')
