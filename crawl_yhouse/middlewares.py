@@ -123,6 +123,8 @@ class CrawlYhouseDownloaderMiddleware(object):
         return s
 
     def process_request(self, request, spider, second=0):
+        # display = Display(visible=0, size=(800, 600))
+        # display.start()
         hostname = socket.gethostname()
         print(hostname)
 
@@ -180,7 +182,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                     # display.stop()
                     return self.process_request(request, spider, second=1)
                 else:
-                    self.display.stop()
+                    # self.display.stop()
                     return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
                 # return HtmlResponse(url=request.url, body=request.url, status=200, encoding="utf-8", request=request)
 
@@ -225,9 +227,12 @@ class CrawlYhouseDownloaderMiddleware(object):
                 # data = self.driver.execute_script('return window.localStorage.roomparams;')
                 # print('data为', data)
             # else:
+            if data is None:
+                print('一直没有请求到', request.url)
+                return None
             self.driver.quit()
-            self.display.stop()
-                # display.stop()
+            # self.display.stop()
+            # display.stop()
             json_data = json.loads(data)
             # 设置会话
             session = Session()
@@ -251,14 +256,14 @@ class CrawlYhouseDownloaderMiddleware(object):
             html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
             # html = session.post(json_url, headers=header, data=json_data).text
             self.driver.quit()#这是最后一个开关
-            self.display.stop()
+            # self.display.stop()
             return HtmlResponse(url=request.url, body=html, status=200, encoding="utf-8", request=request)
         except BaseException as e:
             print(e)
             print('代理有问题')
             print(request.url)
             self.driver.quit()
-            self.display.stop()
+            # self.display.stop()
             # return self.process_request(request, spider)
             second += 1
             if second <= 2:#这里设置重新获取的机会默认2等于三次
