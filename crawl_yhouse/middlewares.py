@@ -165,10 +165,11 @@ class CrawlYhouseDownloaderMiddleware(object):
                 self.driver = Chrome(options=self.option)
             else:
                 self.driver = Chrome(executable_path=DR, options=self.option)
-            self.driver.set_page_load_timeout(15)
+            self.driver.set_page_load_timeout(10)
             self.wait = WebDriverWait(self.driver, 10)
             id = re.search('\d+', request.url).group()
             try:
+                time.sleep(2)
                 self.driver.get(request.url)
                 # print('三连击1', self.driver.get_window_position())
                 # print('三连击1', self.driver.get_window_size())
