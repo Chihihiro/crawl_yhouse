@@ -107,8 +107,9 @@ class CrawlYhouseDownloaderMiddleware(object):
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
     def __init__(self):
-        self.display = Display(visible=0, size=(800, 600))
-        self.display.start()
+        if socket.gethostname() != 'chihiro':
+            self.display = Display(visible=0, size=(800, 600))
+            self.display.start()
     #     self.option = ChromeOptions()
     #     self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
     #     self.prefs = {"profile.managed_default_content_settings.images": 2}
