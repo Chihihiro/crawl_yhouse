@@ -65,8 +65,9 @@ def main(url):
     driver.set_page_load_timeout(15)
     wait = WebDriverWait(driver, 10)
     driver.get(url)
-    user4 = driver.execute_script("return window.navigator.webdriver;")
-    print('是否绕过无头检测', user4)
+
+    # user4 = driver.execute_script("return window.navigator.webdriver;")
+    # print('是否绕过无头检测', user4)
 
     cookies_info = driver.get_cookies()
     # print('cookies id 为：', cookies_info)
@@ -74,6 +75,7 @@ def main(url):
     wait.until(
         EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list'))
     )  # 查找roomSetContainer 后立马请求
+    print(driver.page_source)
     data = driver.execute_script('return window.localStorage.roomparams;')
     driver.quit()
 
