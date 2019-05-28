@@ -259,8 +259,8 @@ class CrawlYhouseDownloaderMiddleware(object):
                 'Connection': "keep-alive",
                 'Content-Length': "521"}
             json_url = 'http://hotel.elong.com/ajax/tmapidetail/gethotelroomsetjvajson'
-            html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
-            # html = session.post(json_url, headers=header, data=json_data).text
+            # html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
+            html = session.post(json_url, headers=header, data=json_data).text
             # self.driver.quit()#这是最后一个开关
             # self.display.stop()
             return HtmlResponse(url=request.url, body=html, status=200, encoding="utf-8", request=request)
