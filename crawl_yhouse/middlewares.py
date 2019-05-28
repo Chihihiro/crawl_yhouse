@@ -168,26 +168,22 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.wait = WebDriverWait(self.driver, 10)
             id = re.search('\d+', request.url).group()
             try:
-                time.sleep(2)
                 self.driver.get(request.url)
-                # print('三连击1', self.driver.get_window_position())
-                # print('三连击1', self.driver.get_window_size())
-                # print('三连击1', self.driver.get_window_rect())
-                # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
+                print('三连击1', self.driver.get_window_position())
+                print('三连击1', self.driver.get_window_size())
+                print('三连击1', self.driver.get_window_rect())
+                self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
             except TimeoutException as e:
                 print(e)
                 print('*'*30)
                 print('timeout')
                 print(second)
                 self.driver.quit()
-                # 获取cookies
                 if second == 0:
-                    # display.stop()
                     return self.process_request(request, spider, second=1)
                 else:
-                    # self.display.stop()
                     return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
-                # return HtmlResponse(url=request.url, body=request.url, status=200, encoding="utf-8", request=request)
+
 
             user4 = self.driver.execute_script("return window.navigator.webdriver;")
             print('是否绕过无头检测', user4)
@@ -197,6 +193,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 cookies_info = self.driver.get_cookies()
                 # print('cookies id 为：', cookies_info)
                 cookies = cookie_to_dict(cookies_info)
+                print(cookies)
                 self.wait.until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list'))
                 )# 查找roomSetContainer 后立马请求
