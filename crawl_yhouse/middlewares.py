@@ -107,9 +107,8 @@ class CrawlYhouseDownloaderMiddleware(object):
     # scrapy acts as if the downloader middleware does not modify the
     # passed objects.
     def __init__(self):
-        if socket.gethostname() != 'chihiro':
-            self.display = Display(visible=0, size=(800, 600))
-            self.display.start()
+        display = Display(visible=0, size=(800, 600))
+        display.start()
     #     self.option = ChromeOptions()
     #     self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
     #     self.prefs = {"profile.managed_default_content_settings.images": 2}
@@ -124,18 +123,17 @@ class CrawlYhouseDownloaderMiddleware(object):
         return s
 
     def process_request(self, request, spider, second=0):
-        # display = Display(visible=0, size=(800, 600))
-        # display.start()
         hostname = socket.gethostname()
         print(hostname)
 
         if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
             pp = ProxyPool().get_proxy().get('http')[7:]
+            # pp = '115.225.85.41:4539'
         else:
 
             pro = [
+                '182.111.157.217:4562',
 
-                '182.111.157.217:4562'
             ]
             pp = random.choice(pro)
         print('本次使用的代理为', pp)
@@ -143,7 +141,6 @@ class CrawlYhouseDownloaderMiddleware(object):
             'http': pp,
         }
         DR = '/usr/local/bin/chromedriver'
-        # request.meta["proxy"] = "http://"+pp
 
 
 
@@ -151,94 +148,77 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option = ChromeOptions()
             # self.option.add_experimental_option('excludeSwitches', ['ignore-certificate-errors'])
             self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
-            # self.prefs = {"profile.managed_default_content_settings.images": 2}
-            # self.option.add_experimental_option("prefs", self.prefs)
-
+            self.prefs = {"profile.managed_default_content_settings.images": 2}
+            self.option.add_experimental_option("prefs", self.prefs)
+            # pp = proxies.get('http')
+            self.option.add_argument("--proxy-server=http://%s" %pp)
             self.option.add_argument('--no-sandbox')
-            # self.option.add_argument('blink-settings=imagesEnabled=false') #不加载图片
+            self.option.add_argument('blink-settings=imagesEnabled=false')
             self.option.add_argument('--disable-gpu')
             # self.option.add_argument('--headless')
             # self.option.add_argument('window-size=800x600')  # 指定浏览器分辨率
-            # self.option.add_argument("--disable-dev-shm-usage")
+            self.option.add_argument("--disable-dev-shm-usage")
             # self.option.add_argument("load-extension=C:\\Users\\xiaod\\Desktop\\Chrome_js")
-            # self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
-            # self.option.add_argument("--proxy-server=%s" % pp)
-            self.option.add_argument('-proxy-server=http://' + pp)
-            if hostname == 'chihiro':
-                self.driver = Chrome(options=self.option)
-            else:
-                self.driver = Chrome(executable_path=DR, options=self.option)
+            self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
+            self.driver = Chrome(executable_path=DR, options=self.option)
             self.driver.set_page_load_timeout(15)
             self.wait = WebDriverWait(self.driver, 10)
             id = re.search('\d+', request.url).group()
             try:
-                time.sleep(2)
                 self.driver.get(request.url)
-                # print('三连击1', self.driver.get_window_position())
-                # print('三连击1', self.driver.get_window_size())
-                # print('三连击1', self.driver.get_window_rect())
+                print('三连击1', self.driver.get_window_position())
+                print('三连击1', self.driver.get_window_size())
+                print('三连击1', self.driver.get_window_rect())
+
                 # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
-            except TimeoutException as e:
-                print(e)
+            except TimeoutException:
                 print('*'*30)
                 print('timeout')
                 print(second)
                 self.driver.quit()
-                # 获取cookies
                 if second == 0:
+
+
                     # display.stop()
                     return self.process_request(request, spider, second=1)
                 else:
-                    # self.display.stop()
                     return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
                 # return HtmlResponse(url=request.url, body=request.url, status=200, encoding="utf-8", request=request)
-
+            # 获取cookies
+            user1 = self.driver.execute_script('return window.navigator.userAgent;')
+            print('user1是', user1)
+            user2 = self.driver.execute_script('return window.outerWidth;')
+            print(user2)
+            user3 = self.driver.execute_script("return window.outerHeight;")
+            print(user3)
             user4 = self.driver.execute_script("return window.navigator.webdriver;")
             print('是否绕过无头检测', user4)
-
             try:
-                # time.sleep(2)#中间不能加延迟了反扒更厉害了
+                time.sleep(2)
                 cookies_info = self.driver.get_cookies()
-                # print('cookies id 为：', cookies_info)
+                print('cookies id 为：', cookies_info)
                 cookies = cookie_to_dict(cookies_info)
-                self.wait.until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list'))
-                )# 查找roomSetContainer 后立马请求
+                self.wait.until(  # 帐号输入框
+                    EC.presence_of_element_located((By.CSS_SELECTOR, '#roomSetContainer'))
+                )
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
                 print('data为', data)
-                if data is None:
-                    for i in range(2):
-                        data = self.driver.execute_script('return window.localStorage.roomparams;')
-                        time.sleep(0.4)
-                        print('data为', data)
-                        if data is not None:
-                            print('多次请求尝试:', i)
-                            break
-                else:
-                    print('data一次请求成功')
+
             except BaseException as e:
                 print(e)
-
+                print('休息两秒第二次再请求')
+                time.sleep(2)
+                cookies_info = self.driver.get_cookies()
+                print('cookies id 为：', cookies_info)
+                cookies = cookie_to_dict(cookies_info)
+                self.wait.until(  # 帐号输入框
+                    EC.presence_of_element_located((By.CSS_SELECTOR, '#roomSetContainer'))
+                )
+                data = self.driver.execute_script('return window.localStorage.roomparams;')
+                print('data为', data)
             else:
                 self.driver.quit()
-            # time.sleep(1)
-            # document = self.driver.execute_script('return document.querySelector("#roomSetContainer")')
-            # print(document.text)
-            # file = open(id+".html", "w", encoding="utf-8")
-            # file.write(document.text)
-            # if room:
-            #     print('找到房间:', request.url)
-            #
-            # else:
-            #     print('没有房间直接跳过')
-            #     return None
-
-
-
-            # else:
-            if data is None:
-                print('一直没有请求到', request.url)
-
+                # display.stop()
             json_data = json.loads(data)
             # 设置会话
             session = Session()
@@ -261,21 +241,19 @@ class CrawlYhouseDownloaderMiddleware(object):
             json_url = 'http://hotel.elong.com/ajax/tmapidetail/gethotelroomsetjvajson'
             html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
             # html = session.post(json_url, headers=header, data=json_data).text
-            # self.driver.quit()#这是最后一个开关
-            # self.display.stop()
+            self.driver.quit()#这是最后一个开关
             return HtmlResponse(url=request.url, body=html, status=200, encoding="utf-8", request=request)
         except BaseException as e:
             print(e)
             print('代理有问题')
             print(request.url)
             self.driver.quit()
-            # self.display.stop()
+            # display.stop()
             # return self.process_request(request, spider)
             second += 1
             if second <= 2:#这里设置重新获取的机会默认2等于三次
                 # print('再给最后一次机会')
                 return self.process_request(request, spider, second=second)
-
             return HtmlResponse(url=request.url, body=request.url, status=201, encoding="utf-8", request=request)
             # return response
         # else:
