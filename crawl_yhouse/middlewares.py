@@ -135,7 +135,7 @@ class CrawlYhouseDownloaderMiddleware(object):
 
             pro = [
 
-                '183.166.160.99:4548'
+                '182.111.157.217:4562'
             ]
             pp = random.choice(pro)
         print('本次使用的代理为', pp)
