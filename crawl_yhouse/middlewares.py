@@ -398,22 +398,22 @@ class CrawlYhouseDownloaderMiddleware2(object):
                 )# 查找roomSetContainer 后立马请求
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
                 print('data为', data)
-                if data is None:
-                    for i in range(2):
-                        data = self.driver.execute_script('return window.localStorage.roomparams;')
-                        time.sleep(0.4)
-                        print('data为', data)
-                        if data is not None:
-                            print('多次请求尝试:', i)
-                            break
-                else:
-                    print('data一次请求成功')
+                # if data is None:
+                #     for i in range(2):
+                #         data = self.driver.execute_script('return window.localStorage.roomparams;')
+                #         time.sleep(0.4)
+                #         print('data为', data)
+                #         if data is not None:
+                #             print('多次请求尝试:', i)
+                #             break
+                # else:
+                print('data一次请求成功')
             except BaseException as e:
                 print(e)
 
             else:
                 self.driver.quit()
-            # time.sleep(1)
+
             # document = self.driver.execute_script('return document.querySelector("#roomSetContainer")')
             # print(document.text)
             # file = open(id+".html", "w", encoding="utf-8")
