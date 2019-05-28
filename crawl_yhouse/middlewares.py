@@ -133,7 +133,7 @@ class CrawlYhouseDownloaderMiddleware(object):
 
             pro = [
 
-                '114.229.61.212:4516'
+                '114.231.124.86:4576'
             ]
             pp = random.choice(pro)
         print('本次使用的代理为', pp)
@@ -236,9 +236,11 @@ class CrawlYhouseDownloaderMiddleware(object):
             # 传入cookies
             session.cookies.update(cookies)
 
+
+
             header = {
+                'User-Agent': random.choice(user_agent),
                 # 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36',
                 'Referer': 'http://hotel.elong.com/%s/' %id,
                 'Origin': 'http://hotel.elong.com',
                 'Host': 'hotel.elong.com',
@@ -249,6 +251,10 @@ class CrawlYhouseDownloaderMiddleware(object):
                 'Accept-Language': "zh-CN,zh;q=0.9",
                 'Connection': "keep-alive",
                 'Content-Length': "521"}
+
+
+
+
             json_url = 'http://hotel.elong.com/ajax/tmapidetail/gethotelroomsetjvajson'
             html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
             # html = session.post(json_url, headers=header, data=json_data).text
