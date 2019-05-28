@@ -195,7 +195,6 @@ class CrawlYhouseDownloaderMiddleware(object):
                 # self.wait.until(
                 #     EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list'))
                 # )# 查找roomSetContainer 后立马请求
-                time.sleep(1)
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
                 print('data为', data)
                 if data is None:
