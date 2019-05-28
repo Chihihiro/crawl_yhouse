@@ -135,7 +135,7 @@ class CrawlYhouseDownloaderMiddleware(object):
 
             pro = [
 
-                '112.83.170.227:4531'
+                '183.166.160.99:4548'
             ]
             pp = random.choice(pro)
         print('本次使用的代理为', pp)
@@ -143,7 +143,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             'http': pp,
         }
         DR = '/usr/local/bin/chromedriver'
-        request.meta["proxy"] = "http://"+pp
+        # request.meta["proxy"] = "http://"+pp
 
 
 
@@ -168,7 +168,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 self.driver = Chrome(options=self.option)
             else:
                 self.driver = Chrome(executable_path=DR, options=self.option)
-            self.driver.set_page_load_timeout(10)
+            self.driver.set_page_load_timeout(15)
             self.wait = WebDriverWait(self.driver, 10)
             id = re.search('\d+', request.url).group()
             try:
