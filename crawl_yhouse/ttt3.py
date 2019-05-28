@@ -52,7 +52,7 @@ def main(url):
     option.add_argument('--no-sandbox')
     option.add_argument('--disable-gpu')
     pp = '182.111.157.217:4562'
-    option.add_argument('-proxy-server=http://' + pp)
+    # option.add_argument('-proxy-server=http://' + pp)
     DR = '/usr/local/bin/chromedriver'
     hostname = socket.gethostname()
     if hostname == 'chihiro':
