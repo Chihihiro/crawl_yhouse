@@ -133,12 +133,12 @@ class CrawlYhouseDownloaderMiddleware(object):
 
             pro = [
 
-                '114.231.124.86:4576'
+                '114.229.61.212:4516'
             ]
             pp = random.choice(pro)
         print('本次使用的代理为', pp)
         proxies = {
-            'http': '114.231.124.86:4576',
+            'http': pp,
         }
         DR = '/usr/local/bin/chromedriver'
         # request.meta["proxy"] = "http://"+pp
