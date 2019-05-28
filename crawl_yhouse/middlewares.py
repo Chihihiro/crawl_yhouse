@@ -151,11 +151,11 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option = ChromeOptions()
             # self.option.add_experimental_option('excludeSwitches', ['ignore-certificate-errors'])
             self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
-            self.prefs = {"profile.managed_default_content_settings.images": 2}
-            self.option.add_experimental_option("prefs", self.prefs)
+            # self.prefs = {"profile.managed_default_content_settings.images": 2}
+            # self.option.add_experimental_option("prefs", self.prefs)
 
             self.option.add_argument('--no-sandbox')
-            self.option.add_argument('blink-settings=imagesEnabled=false')
+            self.option.add_argument('blink-settings=imagesEnabled=false') #不加载图片
             self.option.add_argument('--disable-gpu')
             # self.option.add_argument('--headless')
             # self.option.add_argument('window-size=800x600')  # 指定浏览器分辨率
@@ -178,7 +178,8 @@ class CrawlYhouseDownloaderMiddleware(object):
                 # print('三连击1', self.driver.get_window_size())
                 # print('三连击1', self.driver.get_window_rect())
                 # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
-            except TimeoutException:
+            except TimeoutException as e:
+                print(e)
                 print('*'*30)
                 print('timeout')
                 print(second)
