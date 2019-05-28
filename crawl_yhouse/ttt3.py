@@ -45,29 +45,36 @@ from pyvirtualdisplay import Display
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium import webdriver
 
 proxies = {
-            'http': '182.111.157.217:4562'
+            'http': '125.123.17.123:4525'
         }
 def main(url):
     option = ChromeOptions()
     option.add_experimental_option('excludeSwitches', ['enable-automation'])
     option.add_argument('--no-sandbox')
-    option.add_argument('--disable-gpu')
-    pp = '182.111.157.217:4562'
+    # option.add_argument('--disable-gpu')
+    pp = proxies.get('http')
     option.add_argument('-proxy-server=http://' + pp)
     DR = '/usr/local/bin/chromedriver'
     hostname = socket.gethostname()
     if hostname == 'chihiro':
         driver = Chrome(options=option)
+        # driver = webdriver.Remote(desired_capabilities=DesiredCapabilities.CHROME, options=option)
     else:
-        display = Display(visible=1, size=(800, 600))
+        display = Display(visible=0, size=(800, 600))
         display.start()
         driver = Chrome(executable_path=DR, options=option)
 
     driver.set_page_load_timeout(15)
     wait = WebDriverWait(driver, 10)
     driver.get(url)
+    wait.until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list')))
+
+
 
     # user4 = driver.execute_script("return window.navigator.webdriver;")
     # print('是否绕过无头检测', user4)
@@ -116,7 +123,8 @@ def request_111(all):
         'Connection': "keep-alive",
         'Content-Length': "521"}
     json_url = 'http://hotel.elong.com/ajax/tmapidetail/gethotelroomsetjvajson'
-    html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
+    # html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
+    html = session.post(json_url, headers=header, data=json_data).text
     info = json.loads(html)
     print(info['hotelTipInfo']['hotelId'])
 
