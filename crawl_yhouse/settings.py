@@ -44,6 +44,11 @@ COOKIES_ENABLED = False
 #   'Accept-Language': 'en',
 #}
 
+
+# DOWNLOADER_MIDDLEWARES = {
+#    'crawl_yhouse.proxymiddlewares.ProxyMiddleware': 100,
+#    # 'scrapy.downloadermiddleware.useragent.UserAgentMiddleware': None,
+# }
 # Enable or disable spider middlewares
 # See https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
