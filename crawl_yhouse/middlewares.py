@@ -155,15 +155,15 @@ class CrawlYhouseDownloaderMiddleware(object):
             # self.option.add_experimental_option("prefs", self.prefs)
 
             self.option.add_argument('--no-sandbox')
-            self.option.add_argument('blink-settings=imagesEnabled=false') #不加载图片
+            # self.option.add_argument('blink-settings=imagesEnabled=false') #不加载图片
             self.option.add_argument('--disable-gpu')
             # self.option.add_argument('--headless')
             # self.option.add_argument('window-size=800x600')  # 指定浏览器分辨率
-            self.option.add_argument("--disable-dev-shm-usage")
+            # self.option.add_argument("--disable-dev-shm-usage")
             # self.option.add_argument("load-extension=C:\\Users\\xiaod\\Desktop\\Chrome_js")
-            self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
+            # self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
             # self.option.add_argument("--proxy-server=%s" % pp)
-            # self.option.add_argument('-proxy-server=http://' + pp)
+            self.option.add_argument('-proxy-server=http://' + pp)
             if hostname == 'chihiro':
                 self.driver = Chrome(options=self.option)
             else:
@@ -259,8 +259,8 @@ class CrawlYhouseDownloaderMiddleware(object):
                 'Connection': "keep-alive",
                 'Content-Length': "521"}
             json_url = 'http://hotel.elong.com/ajax/tmapidetail/gethotelroomsetjvajson'
-            # html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
-            html = session.post(json_url, headers=header, data=json_data).text
+            html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
+            # html = session.post(json_url, headers=header, data=json_data).text
             # self.driver.quit()#这是最后一个开关
             # self.display.stop()
             return HtmlResponse(url=request.url, body=html, status=200, encoding="utf-8", request=request)
