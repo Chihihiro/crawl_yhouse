@@ -154,12 +154,12 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.prefs = {"profile.managed_default_content_settings.images": 2}
             self.option.add_experimental_option("prefs", self.prefs)
 
-            # self.option.add_argument('--no-sandbox')
-            # self.option.add_argument('blink-settings=imagesEnabled=false')
-            # self.option.add_argument('--disable-gpu')
+            self.option.add_argument('--no-sandbox')
+            self.option.add_argument('blink-settings=imagesEnabled=false')
+            self.option.add_argument('--disable-gpu')
             # self.option.add_argument('--headless')
             # self.option.add_argument('window-size=800x600')  # 指定浏览器分辨率
-            # self.option.add_argument("--disable-dev-shm-usage")
+            self.option.add_argument("--disable-dev-shm-usage")
             # self.option.add_argument("load-extension=C:\\Users\\xiaod\\Desktop\\Chrome_js")
             self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
             # self.option.add_argument("--proxy-server=%s" % pp)
