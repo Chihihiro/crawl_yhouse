@@ -46,13 +46,16 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
+proxies = {
+            'http': '182.111.157.217:4562'
+        }
 def main(url):
     option = ChromeOptions()
     option.add_experimental_option('excludeSwitches', ['enable-automation'])
     option.add_argument('--no-sandbox')
     option.add_argument('--disable-gpu')
     pp = '182.111.157.217:4562'
-    # option.add_argument('-proxy-server=http://' + pp)
+    option.add_argument('-proxy-server=http://' + pp)
     DR = '/usr/local/bin/chromedriver'
     hostname = socket.gethostname()
     if hostname == 'chihiro':
@@ -75,7 +78,7 @@ def main(url):
     wait.until(
         EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list'))
     )  # 查找roomSetContainer 后立马请求
-    print(driver.page_source)
+    # print(driver.page_source)
     data = driver.execute_script('return window.localStorage.roomparams;')
     driver.quit()
 
@@ -98,7 +101,7 @@ def request_111(all):
     # cookies_a = cookie_to_dict(cookies)
     session.cookies.update(cookies)
 
-
+    id = '52001128'
     header = {
         # 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36',
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36',
@@ -113,7 +116,7 @@ def request_111(all):
         'Connection': "keep-alive",
         'Content-Length': "521"}
     json_url = 'http://hotel.elong.com/ajax/tmapidetail/gethotelroomsetjvajson'
-    html = session.post(json_url, headers=header, data=json_data).text
+    html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
     info = json.loads(html)
     print(info['hotelTipInfo']['hotelId'])
 
