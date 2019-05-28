@@ -167,10 +167,10 @@ class CrawlYhouseDownloaderMiddleware(object):
             id = re.search('\d+', request.url).group()
             try:
                 self.driver.get(request.url)
-                print('三连击1', self.driver.get_window_position())
-                print('三连击1', self.driver.get_window_size())
-                print('三连击1', self.driver.get_window_rect())
-                self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
+                # print('三连击1', self.driver.get_window_position())
+                # print('三连击1', self.driver.get_window_size())
+                # print('三连击1', self.driver.get_window_rect())
+                # self.driver.execute_script("""Object.defineProperty(navigator, 'webdriver', {get: () => false,});""")
             except TimeoutException as e:
                 print(e)
                 print('*'*30)
@@ -192,9 +192,10 @@ class CrawlYhouseDownloaderMiddleware(object):
                 # print('cookies id 为：', cookies_info)
                 cookies = cookie_to_dict(cookies_info)
                 print(cookies)
-                self.wait.until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list'))
-                )# 查找roomSetContainer 后立马请求
+                # self.wait.until(
+                #     EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list'))
+                # )# 查找roomSetContainer 后立马请求
+                time.sleep(1)
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
                 print('data为', data)
                 if data is None:
