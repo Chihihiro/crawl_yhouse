@@ -182,9 +182,9 @@ class CrawlYhouseDownloaderMiddleware(object):
             try:
                 # time.sleep(1)#中间不能加延迟了反扒更厉害了
                 # print(cookies)
-                # self.wait.until(
-                #     EC.presence_of_element_located((By.CSS_SELECTOR, '#roomSetContainer')) #  .htype_list
-                # )# 查找roomSetContainer 后立马请求
+                self.wait.until(
+                    EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list')) #  .htype_list
+                )# 查找roomSetContainer 后立马请求
                 cookies_info = self.driver.get_cookies()
                 cookies = cookie_to_dict(cookies_info)
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
