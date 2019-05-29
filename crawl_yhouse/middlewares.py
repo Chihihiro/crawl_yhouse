@@ -109,7 +109,7 @@ class CrawlYhouseDownloaderMiddleware(object):
     # passed objects.
     def __init__(self):
         if socket.gethostname() != 'chihiro':
-            self.display = Display(visible=1, size=(400, 300))
+            self.display = Display(visible=0, size=(400, 300))
             self.display.start()
     #     self.option = ChromeOptions()
     #     self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
@@ -135,7 +135,7 @@ class CrawlYhouseDownloaderMiddleware(object):
 
             pro = [
 
-                '49.71.62.87:4526'
+                '175.42.120.164:4561'
             ]
             pp = random.choice(pro)
         print('本次使用的代理为', pp)
@@ -220,7 +220,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             else:
                 cookies_info = self.driver.get_cookies()
                 cookies = cookie_to_dict(cookies_info)
-                self.driver.quit()
+                # self.driver.quit()
             # time.sleep(1)
             # document = self.driver.execute_script('return document.querySelector("#roomSetContainer")')
             # print(document.text)
@@ -275,6 +275,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             # html = session.post(json_url, headers=header, data=json_data).text
             # self.driver.quit()#这是最后一个开关
             # self.display.stop()
+            self.driver.quit()
             return HtmlResponse(url=request.url, body=html, status=200, encoding="utf-8", request=request)
         except BaseException as e:
             print(e)
