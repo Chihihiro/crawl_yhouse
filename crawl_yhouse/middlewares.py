@@ -187,7 +187,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             print('是否绕过无头检测', user4)
 
             try:
-                time.sleep(2)#中间不能加延迟了反扒更厉害了
+                time.sleep(1)#中间不能加延迟了反扒更厉害了
                 # print(cookies)
                 self.wait.until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, '#roomSetContainer')) #  .htype_list
