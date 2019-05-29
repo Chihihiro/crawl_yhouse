@@ -268,6 +268,7 @@ class CrawlYhouseDownloaderMiddleware(object):
 
             json_url = 'http://hotel.elong.com/ajax/tmapidetail/gethotelroomsetjvajson'
             print('请求时使用的data 为：', data)
+            print('cookies 为：', cookies)
             html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
             # html = session.post(json_url, headers=header, data=json_data).text
             # self.driver.quit()#这是最后一个开关
