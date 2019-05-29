@@ -109,7 +109,7 @@ class CrawlYhouseDownloaderMiddleware(object):
     # passed objects.
     def __init__(self):
         if socket.gethostname() != 'chihiro':
-            self.display = Display(visible=0, size=(400, 300))
+            self.display = Display(visible=1, size=(400, 300))
             self.display.start()
     #     self.option = ChromeOptions()
     #     self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
