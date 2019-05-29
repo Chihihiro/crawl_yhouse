@@ -177,8 +177,12 @@ class CrawlYhouseDownloaderMiddleware(object):
                     return self.process_request(request, spider, second=1)
                 else:
                     return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
-
-
+            user1 = self.driver.execute_script('return window.navigator.userAgent;')
+            print('user1是', user1)
+            user2 = self.driver.execute_script('return window.outerWidth;')
+            print(user2)
+            user3 = self.driver.execute_script("return window.outerHeight;")
+            print(user3)
             user4 = self.driver.execute_script("return window.navigator.webdriver;")
             print('是否绕过无头检测', user4)
 
