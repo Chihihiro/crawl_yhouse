@@ -194,9 +194,9 @@ class CrawlYhouseDownloaderMiddleware(object):
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
                 print('data为', data)
                 if data is None:
-                    for i in range(2):
+                    for i in range(4):
                         data = self.driver.execute_script('return window.localStorage.roomparams;')
-                        time.sleep(0.4)
+                        time.sleep(0.2)
                         print('data为', data)
                         if data is not None:
                             print('多次请求尝试:', i)
