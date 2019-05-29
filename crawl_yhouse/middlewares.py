@@ -193,20 +193,20 @@ class CrawlYhouseDownloaderMiddleware(object):
                 cookies = cookie_to_dict(cookies_info)
                 # print(cookies)
                 self.wait.until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list')) #  .htype_list
+                    EC.presence_of_element_located((By.CSS_SELECTOR, '#roomSetContainer')) #  .htype_list
                 )# 查找roomSetContainer 后立马请求
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
                 print('data为', data)
-                if data is None:
-                    for i in range(4):
-                        data = self.driver.execute_script('return window.localStorage.roomparams;')
-                        time.sleep(0.2)
-                        print('data为', data)
-                        if data is not None:
-                            print('多次请求尝试:', i)
-                            break
-                else:
-                    print('data一次请求成功')
+                # if data is None:
+                #     for i in range(4):
+                #         data = self.driver.execute_script('return window.localStorage.roomparams;')
+                #         time.sleep(0.2)
+                #         print('data为', data)
+                #         if data is not None:
+                #             print('多次请求尝试:', i)
+                #             break
+                # else:
+                #     print('data一次请求成功')
             except BaseException as e:
                 print(e)
 
