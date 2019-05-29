@@ -128,8 +128,8 @@ class CrawlYhouseDownloaderMiddleware(object):
         print(hostname)
 
         if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
-            # pp = ProxyPool().get_proxy().get('http')[7:]
-            pp = '49.71.62.87:4526'
+            pp = ProxyPool().get_proxy().get('http')[7:]
+            # pp = '49.71.62.87:4526'
         else:
 
             pro = [
@@ -183,9 +183,9 @@ class CrawlYhouseDownloaderMiddleware(object):
             try:
                 # time.sleep(1)#中间不能加延迟了反扒更厉害了
                 # print(cookies)
-                self.wait.until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list')) #  .htype_list
-                )# 查找roomSetContainer 后立马请求
+                # self.wait.until(
+                #     EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list')) #  .htype_list
+                # )# 查找roomSetContainer 后立马请求
                 cookies_info = self.driver.get_cookies()
                 cookies = cookie_to_dict(cookies_info)
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
@@ -201,16 +201,16 @@ class CrawlYhouseDownloaderMiddleware(object):
                 print('是否绕过无头检测', user4)
                 ziti = self.driver.execute_script("return document.getElementsByClassName('t24 yahei').length")
                 print('字体是：', ziti)
-                # if data is None:
-                #     for i in range(4):
-                #         data = self.driver.execute_script('return window.localStorage.roomparams;')
-                #         time.sleep(0.2)
-                #         print('data为', data)
-                #         if data is not None:
-                #             print('多次请求尝试:', i)
-                #             break
-                # else:
-                #     print('data一次请求成功')
+                if data is None:
+                    for i in range(3):
+                        data = self.driver.execute_script('return window.localStorage.roomparams;')
+                        time.sleep(0.2)
+                        print('data为', data)
+                        if data is not None:
+                            print('多次请求尝试:', i)
+                            break
+                else:
+                    print('data一次请求成功')
             except BaseException as e:
                 print(e)
 
