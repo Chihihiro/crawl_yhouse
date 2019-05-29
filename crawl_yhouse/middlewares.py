@@ -187,7 +187,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             print('是否绕过无头检测', user4)
 
             try:
-                # time.sleep(2)#中间不能加延迟了反扒更厉害了
+                time.sleep(2)#中间不能加延迟了反扒更厉害了
                 cookies_info = self.driver.get_cookies()
                 # print('cookies id 为：', cookies_info)
                 cookies = cookie_to_dict(cookies_info)
