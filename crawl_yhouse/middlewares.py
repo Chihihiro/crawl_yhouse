@@ -177,14 +177,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                     return self.process_request(request, spider, second=1)
                 else:
                     return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
-            user1 = self.driver.execute_script('return window.navigator.userAgent;')
-            print('user1是', user1)
-            user2 = self.driver.execute_script('return window.outerWidth;')
-            print(user2)
-            user3 = self.driver.execute_script("return window.outerHeight;")
-            print(user3)
-            user4 = self.driver.execute_script("return window.navigator.webdriver;")
-            print('是否绕过无头检测', user4)
+
 
             try:
                 time.sleep(1)#中间不能加延迟了反扒更厉害了
@@ -196,6 +189,15 @@ class CrawlYhouseDownloaderMiddleware(object):
                 cookies = cookie_to_dict(cookies_info)
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
                 print('data为', data)
+
+                user1 = self.driver.execute_script('return window.navigator.userAgent;')
+                print('user1是', user1)
+                user2 = self.driver.execute_script('return window.outerWidth;')
+                print(user2)
+                user3 = self.driver.execute_script("return window.outerHeight;")
+                print(user3)
+                user4 = self.driver.execute_script("return window.navigator.webdriver;")
+                print('是否绕过无头检测', user4)
                 # if data is None:
                 #     for i in range(4):
                 #         data = self.driver.execute_script('return window.localStorage.roomparams;')
