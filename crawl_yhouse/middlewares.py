@@ -201,7 +201,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 # ziti = self.driver.execute_script("return document.getElementsByClassName('t24 yahei').length")
                 # print('字体是：', ziti)
                 if data is None:
-                    for i in range(10):
+                    for i in range(30):
                         data = self.driver.execute_script('return window.localStorage.roomparams;')
                         time.sleep(0.2)
                         print('data为', data)
