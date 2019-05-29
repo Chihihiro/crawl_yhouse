@@ -186,8 +186,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 # self.wait.until(
                 #     EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list')) #  .htype_list
                 # )# 查找roomSetContainer 后立马请求
-                cookies_info = self.driver.get_cookies()
-                cookies = cookie_to_dict(cookies_info)
+
                 data = self.driver.execute_script('return window.localStorage.roomparams;')
                 print('data为', data)
 
@@ -217,6 +216,8 @@ class CrawlYhouseDownloaderMiddleware(object):
                 cookies = None
 
             else:
+                cookies_info = self.driver.get_cookies()
+                cookies = cookie_to_dict(cookies_info)
                 self.driver.quit()
             # time.sleep(1)
             # document = self.driver.execute_script('return document.querySelector("#roomSetContainer")')
@@ -266,6 +267,7 @@ class CrawlYhouseDownloaderMiddleware(object):
 
 
             json_url = 'http://hotel.elong.com/ajax/tmapidetail/gethotelroomsetjvajson'
+            print('请求时使用的data 为：', data)
             html = session.post(json_url, headers=header, data=json_data, proxies=proxies).text
             # html = session.post(json_url, headers=header, data=json_data).text
             # self.driver.quit()#这是最后一个开关
