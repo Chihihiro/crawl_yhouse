@@ -97,6 +97,7 @@ def change_args(x):
 
 
 from pyvirtualdisplay import Display
+from easyprocess import EasyProcess
 from selenium.webdriver.common.by import By
 
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -108,7 +109,7 @@ class CrawlYhouseDownloaderMiddleware(object):
     # passed objects.
     def __init__(self):
         if socket.gethostname() != 'chihiro':
-            self.display = Display(visible=1, size=(400, 300))
+            self.display = Display(visible=0, size=(400, 300))
             self.display.start()
     #     self.option = ChromeOptions()
     #     self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
@@ -152,9 +153,10 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
             self.prefs = {"profile.managed_default_content_settings.images": 2}
             self.option.add_experimental_option("prefs", self.prefs)#不加载图片
-            self.option.add_argument('--no-sandbox')
+
             self.option.add_argument('blink-settings=imagesEnabled=false') #不加载图片
             self.option.add_argument('--disable-gpu')
+            self.option.add_argument('--no-sandbox')
             self.option.add_argument("--disable-dev-shm-usage")
             self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
 
