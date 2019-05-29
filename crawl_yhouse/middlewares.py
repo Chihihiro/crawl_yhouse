@@ -197,12 +197,12 @@ class CrawlYhouseDownloaderMiddleware(object):
                 # print(user2)
                 # user3 = self.driver.execute_script("return window.outerHeight;")
                 # print(user3)
-                user4 = self.driver.execute_script("return window.navigator.webdriver;")
-                print('是否绕过无头检测', user4)
-                ziti = self.driver.execute_script("return document.getElementsByClassName('t24 yahei').length")
-                print('字体是：', ziti)
+                # user4 = self.driver.execute_script("return window.navigator.webdriver;")
+                # print('是否绕过无头检测', user4)
+                # ziti = self.driver.execute_script("return document.getElementsByClassName('t24 yahei').length")
+                # print('字体是：', ziti)
                 if data is None:
-                    for i in range(3):
+                    for i in range(10):
                         data = self.driver.execute_script('return window.localStorage.roomparams;')
                         time.sleep(0.2)
                         print('data为', data)
@@ -213,6 +213,8 @@ class CrawlYhouseDownloaderMiddleware(object):
                     print('data一次请求成功')
             except BaseException as e:
                 print(e)
+                data = None
+                cookies = None
 
             else:
                 self.driver.quit()
@@ -233,6 +235,10 @@ class CrawlYhouseDownloaderMiddleware(object):
             # else:
             if data is None:
                 print('一直没有请求到', request.url)
+                second += 1
+                if second <= 2:  # 这里设置重新获取的机会默认2等于三次
+                    # print('再给最后一次机会')
+                    return self.process_request(request, spider, second=second)
 
             json_data = json.loads(data)
             # 设置会话
