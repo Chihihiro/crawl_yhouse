@@ -37,16 +37,13 @@ class YilongSpider(scrapy.Spider):
     name = 'yilong'
     # allowed_domains = ['http://hotel.elong.com/92494775/']
     start_urls = [
-                  # 'http://hotel.elong.com/52001128/',
+                  'http://hotel.elong.com/52001128/',
                   'http://hotel.elong.com/91191052/',
-                  # 'http://hotel.elong.com/90684208/',
-                  # 'http://hotel.elong.com/50301037/',#这个很特别 需要单独处理
-                  # 'http://hotel.elong.com/10201185/',
-
-                  #
-
-                  # 'http://hotel.elong.com/40201952/',
-                  # 'http://hotel.elong.com/91855173/',
+                  'http://hotel.elong.com/90684208/',
+                  'http://hotel.elong.com/50301037/',#这个很特别 需要单独处理
+                  'http://hotel.elong.com/10201185/',
+                  'http://hotel.elong.com/40201952/',
+                  'http://hotel.elong.com/91855173/',
 
 
                   # 'http://hotel.elong.com/10201307/',
