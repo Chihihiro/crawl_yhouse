@@ -189,7 +189,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             )# 查找roomSetContainer 后立马请求
             time.sleep(2)
             html = self.driver.page_source
-            # self.driver.quit()
+            self.driver.quit()
             return HtmlResponse(url=request.url, body=html, status=200, encoding="utf-8", request=request)
         except BaseException as e:
             print(e)
