@@ -165,8 +165,8 @@ class CrawlYhouseDownloaderMiddleware(object):
             else:
                 option.add_argument('-proxy-server=http://' + pp)
                 driver = Chrome(executable_path=DR, options=option)
-            driver.set_page_load_timeout(15)
-            wait = WebDriverWait(driver, 10)
+            driver.set_page_load_timeout(11)
+            wait = WebDriverWait(driver, 12)
             try:
                 driver.get(request.url)
             except TimeoutException as e:
@@ -195,7 +195,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             if second <= 2:#这里设置重新获取的机会默认2等于三次
                 # print('再给最后一次机会')
                 return self.process_request(request, spider, second=second)
-
+            print('成功~~~~~~~~~~')
             return HtmlResponse(url=request.url, body=request.url, status=201, encoding="utf-8", request=request)
 
     def process_response(self, request, response, spider):
