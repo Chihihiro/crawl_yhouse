@@ -43,8 +43,8 @@ class CrawlYhousePipeline(object):
         # print(type(item))
         table = TABLE_DICT.get(type(item))
         df = pd.DataFrame([dict(item)])
-        df['order_status'] = df['order_status'].apply(lambda x: 1 if x == True else 0)
-        df['policy'] = df['policy'].apply(lambda x: clean3(x))
+        # df['order_status'] = df['order_status'].apply(lambda x: 1 if x == True else 0)
+        # df['policy'] = df['policy'].apply(lambda x: clean3(x))
         # clean_df = for_columns(df)
         to_sql(table, choise_engine, df, type="update")
         return item

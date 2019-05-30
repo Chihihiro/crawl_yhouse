@@ -38,13 +38,14 @@ class YilongSpider(scrapy.Spider):
     # allowed_domains = ['http://hotel.elong.com/92494775/']
     start_urls = [
                   'http://hotel.elong.com/52001128/',
-                  # 'http://hotel.elong.com/50301037/',
+                    # 'http://hotel.elong.com/40201010/',
+                  'http://hotel.elong.com/91191052/',
                   # 'http://hotel.elong.com/90684208/',
-                  'http://hotel.elong.com/50301037/',#这个很特别 需要单独处理
+                  # 'http://hotel.elong.com/50301037/',#这个很特别 需要单独处理
                   # 'http://hotel.elong.com/10201185/',
 
                   #
-                  'http://hotel.elong.com/40201010/',
+
                   # 'http://hotel.elong.com/40201952/',
                   # 'http://hotel.elong.com/91855173/',
 
@@ -75,9 +76,9 @@ class YilongSpider(scrapy.Spider):
         }
     }
 
-    # to_getid = get_id()
+    to_getid = get_id()
 
-    #
+
     # def parse(self, response):
     #     print('到 parse了')
     #     print(response.status)
@@ -92,40 +93,41 @@ class YilongSpider(scrapy.Spider):
     #         yilong_id = info['hotelTipInfo']['hotelId']
     #         if yilong_id ==yhouse_id:
     #             print('请求成功拿到正确id')
-    #         #     item = CrawlYhouseItem()
-    #         #     host_id = self.to_getid.get(yhouse_id)
-    #         #     item['host_id'] = host_id
-    #         #     item['hotel_id'] = yhouse_id
-    #         #     item['hotel_name'] = info['hotelInventory']['hotelName']
-    #         #     rooms_house = info['hotelInventory']['rooms']
-    #         #     checkin = info['hotelInventory']['detailRequest']['checkInDate']
-    #         #     item['checkin'] = chang_time(checkin)
-    #         #     checkout = info['hotelInventory']['detailRequest']['checkOutDate']
-    #         #     item['checkout'] = chang_time(checkout)
-    #         #     for mother_room in rooms_house:
-    #         #         # 母房型级
-    #         #         item['major_room_id'] = mother_room['roomTypeID']#母房型ID
-    #         #         item['major_room_name'] = mother_room['roomTypeName']
-    #         #         item['bed_type'] = mother_room['bedTypeName']
-    #         #         item['network'] = mother_room['networkDesc']
-    #         #         for room in mother_room['allProductList']:
-    #         #             item['minor_room_name'] = room['ratePlanName']
-    #         #             item['minor_room_id'] = room['sRoomTypeID']
-    #         #             item['breakfast'] = room['breakfastDesc']
-    #         #             item['policy'] = room['cancelRuleDesc']
-    #         #             item['person'] = room['maxPerson']
-    #         #             item['price'] = room['avgPrice']
-    #         #             item['create_time'] = chang_time_all()
-    #         #             item['order_status'] = room['enableBook']
-    #         #             item['sou'] = 0
-    #         #             yield item
-    #         else:
-    #             print('ID不相同')
-    #         #     pass
-    #         pass
-    #     else:
-    #         pass
+    #             item = CrawlYhouseItem()
+                # host_id = self.to_getid.get(yhouse_id)
+                # item['host_id'] = host_id
+                # item['hotel_id'] = yhouse_id
 
+                # item['hotel_name'] = info['hotelInventory']['hotelName']
+                # rooms_house = info['hotelInventory']['rooms']
+                # checkin = info['hotelInventory']['detailRequest']['checkInDate']
+
+                # checkout = info['hotelInventory']['detailRequest']['checkOutDate']
+                # item['checkout'] = chang_time(checkout)
+                # item['checkin'] = chang_time(checkin)
+                # for mother_room in rooms_house:
+                    # 母房型级
+                    # item['major_room_id'] = mother_room['roomTypeID']#母房型ID
+                    # item['major_room_name'] = mother_room['roomTypeName']
+                    # item['bed_type'] = mother_room['bedTypeName']
+                    # item['network'] = mother_room['networkDesc']
+                    # for room in mother_room['allProductList']:
+                        # item['minor_room_name'] = room['ratePlanName']
+                        # item['minor_room_id'] = room['sRoomTypeID']
+                        # item['breakfast'] = room['breakfastDesc']
+                        # item['policy'] = room['cancelRuleDesc']
+                        # item['person'] = room['maxPerson']
+                        # item['price'] = room['avgPrice']
+                        # item['create_time'] = chang_time_all()
+        #                 item['order_status'] = room['enableBook']
+        #                 item['sou'] = 0
+        #                 yield item
+        #     else:
+        #         print('ID不相同')
+        #     #     pass
+        #     pass
+        # else:
+        #     pass
 
 
 
@@ -139,26 +141,63 @@ class YilongSpider(scrapy.Spider):
         if response.status == 201:
             print(2011111111111)
         elif response.status == 200:
-            url_id = re.search('\d+', response.url).group()
+            yhouse_id = re.search('\d+', response.url).group()
             item = CrawlYhouseItem()
-            item['hotel_id'] = url_id
-            # print(response.body)
+            item['hotel_id'] = yhouse_id
+            host_id = self.to_getid.get(yhouse_id)
+            item['host_id'] = host_id
+            item['hotel_id'] = yhouse_id
+
             print("*"*100)
             selector = Selector(response)
-            # rom4 = selector.xpath('//*[@id="roomSetContainer"]/div[2]/div[1]/div')
-            rom4 = selector.xpath('//*[@id="roomSetContainer"]/div[2]/div/div')
-            for i in range(len(rom4)):
-                room = rom4[i].xpath('div[1]/div[3]/p[1]/span[1]/text()').extract()[0]
-                item['minor_room_name'] = room
-                ll = rom4[i].xpath('div[3]/table/tbody/tr')[0:-1]
-                print(len(ll))
+            item['hotel_name'] = selector.xpath('/html/body/div[3]/div/div[1]/div[1]/div/h1/text()').extract()[0]
+            checkin = selector.xpath('/html/body/div[4]/div[1]/div[1]/div[4]/div[1]/label[1]/input/@value').extract()[0]
+            checkout = selector.xpath('/html/body/div[4]/div[1]/div[1]/div[4]/div[1]/label[2]/input/@value').extract()[0]
+            item['checkout'] = checkout
+            item['checkin'] = checkin
+
+
+            rom = selector.xpath('//*[@id="roomSetContainer"]/div[2]/div/div')
+            for i in range(len(rom)):
+                # 母房型级
+                room = rom[i].xpath('div[1]/div[3]/p[1]/span[1]/text()').extract()[0]
+                item['major_room_name'] = room
+                ll = rom[i].xpath('div[3]/table/tbody/tr')[0:-1]
+
+
+                item['bed_type'] = rom[i].xpath('div[1]/div[3]/p[2]/span[3]/text()').extract()[0]
+                item['network'] = rom[i].xpath('div[1]/div[3]/p[2]/span[9]/text()').extract()[0]
+                item['person'] = len(rom[i].xpath('div[1]/div[3]/p[2]/span[5]/i'))
+
+
+
                 for x in ll:
+                    item['major_room_id'] = x.xpath('@data-mroomid').extract()[0]
+                    item['minor_room_id'] = x.xpath('@data-sroomid').extract()[0]
+                    item['minor_room_name'] = x.xpath('//*[@id="roomId0011"]/div[3]/table/tbody/tr[1]/td[2]/span/text()').extract()[0]
+                    item['breakfast'] = x.xpath('td[4]/text()').extract()[0]
+                    item['policy'] = x.xpath('td[5]/p[1]/span/text()').extract()[0]
                     plice = x.xpath('td[6]/span/span/text()').extract()[0]
-                    print(plice)
-                    item['plice'] = plice
-                    print(item)
-                    # yield item
-                    pass
+                    plice_point = x.xpath('td[6]/span/span/span/text()').extract()
+                    if plice:
+                        item['plice'] = plice
+                    else:
+                        item['plice'] = plice + plice_point[0]
+
+                    item['create_time'] = chang_time_all()
+
+                    order_status = x.xpath('/td[7]/span').extract()
+                    if len(order_status) == 1:
+                        order = 0
+                    else:
+                        order = 1
+                    item['order_status'] = order
+                    item['sou'] = 0
+
+
+                    yield item
+                    # pass
+
 
 
 
