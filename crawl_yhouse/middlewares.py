@@ -111,6 +111,17 @@ class CrawlYhouseDownloaderMiddleware(object):
         if socket.gethostname() != 'chihiro':
             self.display = Display(visible=0, size=(400, 300))
             self.display.start()
+        self.option = ChromeOptions()
+        self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
+        self.prefs = {"profile.managed_default_content_settings.images": 2}
+        self.option.add_experimental_option("prefs", self.prefs)
+        self.option.add_argument('lang=zh_CN.UTF-8')
+        self.option.add_argument('blink-settings=imagesEnabled=false')
+        self.option.add_argument('--disable-gpu')
+        self.option.add_argument('--no-sandbox')
+        self.option.add_argument("--disable-dev-shm-usage")
+        self.option.add_argument(
+            'user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
     #     self.option = ChromeOptions()
     #     self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
     #     self.prefs = {"profile.managed_default_content_settings.images": 2}
@@ -130,11 +141,9 @@ class CrawlYhouseDownloaderMiddleware(object):
 
         if hostname in ('wx09', 'wx01', 'wx02', 'wx03', 'wx04', 'wx05', 'wx06', 'wx07', 'wx08'):
             pp = ProxyPool().get_proxy().get('http')[7:]
-            # pp = '49.71.62.87:4526'
         else:
 
             pro = [
-
                 '123.156.179.7:4581',
                 '183.163.36.99:4554',
                 '36.56.149.214:4542',
@@ -144,42 +153,20 @@ class CrawlYhouseDownloaderMiddleware(object):
                 '121.226.14.75:4518',
                 '106.35.172.55:4593',
                 '117.57.21.156:4576',
-
             ]
             pp = random.choice(pro)
         print('本次使用的代理为', pp)
 
         DR = '/usr/local/bin/chromedriver'
-
-
-
-
         try:
-            self.option = ChromeOptions()
-            # self.option.add_experimental_option('excludeSwitches', ['ignore-certificate-errors'])
-            self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
-            self.prefs = {"profile.managed_default_content_settings.images": 2}
-            self.option.add_experimental_option("prefs", self.prefs)#不加载图片
-            self.option.add_argument('lang=zh_CN.UTF-8')
-            self.option.add_argument('blink-settings=imagesEnabled=false') #不加载图片
-            self.option.add_argument('--disable-gpu')
-            self.option.add_argument('--no-sandbox')
-            # self.option.add_argument('--headless')
-
-            self.option.add_argument("--disable-dev-shm-usage")
-            self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
-
-
             if hostname == 'chihiro':
                 self.option.add_argument('-proxy-server=http://' + pp)
                 self.driver = Chrome(options=self.option)
-
             else:
                 self.option.add_argument('-proxy-server=http://' + pp)
                 self.driver = Chrome(executable_path=DR, options=self.option)
             self.driver.set_page_load_timeout(15)
             self.wait = WebDriverWait(self.driver, 15)
-            id = re.search('\d+', request.url).group()
             try:
                 self.driver.get(request.url)
             except TimeoutException as e:
@@ -192,10 +179,8 @@ class CrawlYhouseDownloaderMiddleware(object):
                     return self.process_request(request, spider, second=1)
                 else:
                     return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
-
-
             self.wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list')) #  .htype_list
+                EC.presence_of_element_located((By.CSS_SELECTOR, '#roomSetContainer')) #  .htype_list
             )# 查找roomSetContainer 后立马请求
             time.sleep(2)
             html = self.driver.page_source
@@ -203,20 +188,15 @@ class CrawlYhouseDownloaderMiddleware(object):
             return HtmlResponse(url=request.url, body=html, status=200, encoding="utf-8", request=request)
         except BaseException as e:
             print(e)
-            print('代理有问题')
+            print('综合问题')
             print(request.url)
             self.driver.quit()
-            # self.display.stop()
-            # return self.process_request(request, spider)
             second += 1
             if second <= 2:#这里设置重新获取的机会默认2等于三次
                 # print('再给最后一次机会')
                 return self.process_request(request, spider, second=second)
 
             return HtmlResponse(url=request.url, body=request.url, status=201, encoding="utf-8", request=request)
-            # return response
-        # else:
-        #     return HtmlResponse(url=request.url, body='id不准确', status=200, encoding="utf-8", request=request)
 
     def process_response(self, request, response, spider):
         # Called with the response returned from the downloader.

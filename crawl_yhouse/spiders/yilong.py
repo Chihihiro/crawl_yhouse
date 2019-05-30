@@ -38,22 +38,22 @@ from crawl_yhouse.ceshi.ll import lls
 class YilongSpider(scrapy.Spider):
     name = 'yilong'
     # allowed_domains = ['http://hotel.elong.com/92494775/']
-    # start_urls = [
-    #               # 'http://hotel.elong.com/52001128/',
-    #               # 'http://hotel.elong.com/91191052/',
-    #               # 'http://hotel.elong.com/90684208/',
-    #               'http://hotel.elong.com/50301037/',#这个很特别 需要单独处理
-    #               # 'http://hotel.elong.com/10201185/',
-    #               # 'http://hotel.elong.com/40201952/',
-    #               # 'http://hotel.elong.com/91855173/',
-    #               'http://hotel.elong.com/10201307/',
-    #               # 'http://hotel.elong.com/40201044/',
-    #               # 'http://hotel.elong.com/10201082/',
-    #               # 'http://hotel.elong.com/50201055/',
-    #
-    #               ]
+    start_urls = [
+                  'http://hotel.elong.com/52001128/',
+                  'http://hotel.elong.com/91191052/',
+                  'http://hotel.elong.com/90684208/',
+                  'http://hotel.elong.com/50301037/',#这个很特别 需要单独处理
+                  'http://hotel.elong.com/10201185/',
+                  'http://hotel.elong.com/40201952/',
+                  'http://hotel.elong.com/91855173/',
+                  'http://hotel.elong.com/90602068/', #这个酒店就没有
+                  # 'http://hotel.elong.com/40201044/',
+                  'http://hotel.elong.com/10201082/',
+                  # 'http://hotel.elong.com/50201055/',
 
-    start_urls = lls
+                  ]
+
+    # start_urls = lls
 
 
 
@@ -66,7 +66,10 @@ class YilongSpider(scrapy.Spider):
         }
     }
 
+
     to_getid = get_id()
+
+
 
 
 
@@ -82,21 +85,21 @@ class YilongSpider(scrapy.Spider):
             print(2011111111111)
         elif response.status == 200:
             yhouse_id = re.search('\d+', response.url).group()
-            item = CrawlYhouseItem()
-            item['hotel_id'] = yhouse_id
             host_id = self.to_getid.get(yhouse_id)
             if host_id is None:
                 host_id = '没有匹配到'
-            item['host_id'] = host_id
-            item['hotel_id'] = yhouse_id
 
             print("*"*100)
             selector = Selector(response)
-            no_hotel = selector.xpath('//*[@id="roomSetContainer"]/div/div/div/span/a/text').extract()
-            if no_hotel[0] == '修改日期':
+            no_hotel = selector.xpath('//*[@id="roomSetContainer"]/div/div/div/span/a/text()').extract()
+            if len(no_hotel) == 1:
                 print('此日期没有房间跳过~~~~~~~~')
                 pass
             else:
+                item = CrawlYhouseItem()
+                item['hotel_id'] = yhouse_id
+                item['host_id'] = host_id
+                item['hotel_id'] = yhouse_id
                 item['hotel_name'] = selector.xpath('/html/body/div[3]/div/div[1]/div[1]/div/h1/text()').extract()[0]
                 checkin = selector.xpath('/html/body/div[4]/div[1]/div[1]/div[4]/div[1]/label[1]/input/@value').extract()[0]
                 checkout = selector.xpath('/html/body/div[4]/div[1]/div[1]/div[4]/div[1]/label[2]/input/@value').extract()[0]
@@ -139,10 +142,3 @@ class YilongSpider(scrapy.Spider):
                         item['order_status'] = order
                         item['sou'] = 0
                         yield item
-
-
-
-
-
-
-
