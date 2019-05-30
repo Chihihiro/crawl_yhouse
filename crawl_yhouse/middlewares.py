@@ -165,8 +165,8 @@ class CrawlYhouseDownloaderMiddleware(object):
             else:
                 option.add_argument('-proxy-server=http://' + pp)
                 driver = Chrome(executable_path=DR, options=option)
-            driver.set_page_load_timeout(11)
-            wait = WebDriverWait(driver, 12)
+            driver.set_page_load_timeout(15)
+            wait = WebDriverWait(driver, 15)
             try:
                 driver.get(request.url)
             except TimeoutException as e:
