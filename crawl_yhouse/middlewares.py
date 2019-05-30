@@ -166,7 +166,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 self.option.add_argument('-proxy-server=http://' + pp)
                 self.driver = Chrome(executable_path=DR, options=self.option)
             self.driver.set_page_load_timeout(15)
-            self.wait = WebDriverWait(self.driver, 15)
+            self.wait = WebDriverWait(self.driver, 7)
             try:
                 self.driver.get(request.url)
             except TimeoutException as e:
@@ -179,9 +179,9 @@ class CrawlYhouseDownloaderMiddleware(object):
                     return self.process_request(request, spider, second=1)
                 else:
                     return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
-            self.wait.until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, '#roomSetContainer')) #  .htype_list
-            )# 查找roomSetContainer 后立马请求
+            # self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#roomSetContainer'))) #  .htype_list
+            self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list')))  #
+            # 查找roomSetContainer 后立马请求
             time.sleep(2)
             html = self.driver.page_source
             self.driver.quit()
