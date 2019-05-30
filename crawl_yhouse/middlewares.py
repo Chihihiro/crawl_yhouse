@@ -180,7 +180,7 @@ class CrawlYhouseDownloaderMiddleware(object):
                 else:
                     return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
             # self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#roomSetContainer'))) #  .htype_list
-            wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list')))  #
+            wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.hdetail_type')))  #hdetail_type
             # 查找roomSetContainer 后立马请求
             time.sleep(2)
             html = driver.page_source
