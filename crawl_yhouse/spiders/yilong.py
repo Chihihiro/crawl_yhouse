@@ -150,7 +150,7 @@ class YilongSpider(scrapy.Spider):
             for i in range(len(rom4)):
                 room = rom4[i].xpath('div[1]/div[3]/p[1]/span[1]/text()').extract()[0]
                 item['minor_room_name'] = room
-                ll = rom4[i].xpath('div[3]/table/tbody/tr')#[0:-1]
+                ll = rom4[i].xpath('div[3]/table/tbody/tr')[0:-1]
                 print(len(ll))
                 for x in ll:
                     plice = x.xpath('td[6]/span/span/text()').extract()[0]
