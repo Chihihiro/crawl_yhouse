@@ -141,7 +141,7 @@ class YilongSpider(scrapy.Spider):
                         order = 1
                     item['order_status'] = order
                     item['sou'] = 0
-                    yield item
+            yield item
 
 
 
