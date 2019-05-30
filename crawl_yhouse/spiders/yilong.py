@@ -49,19 +49,19 @@ class YilongSpider(scrapy.Spider):
                   # 'http://hotel.elong.com/91855173/',
 
 
-                  'http://hotel.elong.com/10201307/',
-                  'http://hotel.elong.com/40201044/',
-                  'http://hotel.elong.com/10201082/',
-                  'http://hotel.elong.com/50201055/',
-                  'http://hotel.elong.com/40201192/',
-                  'http://hotel.elong.com/50201284/',
-                  'http://hotel.elong.com/50201261/',
-                  'http://hotel.elong.com/50201481/',
-                  'http://hotel.elong.com/00101108/',
-                  'http://hotel.elong.com/40301051/',
-                  'http://hotel.elong.com/00101972/',
-                  'http://hotel.elong.com/40101839/',
-                  'http://hotel.elong.com/40101676/',
+                  # 'http://hotel.elong.com/10201307/',
+                  # 'http://hotel.elong.com/40201044/',
+                  # 'http://hotel.elong.com/10201082/',
+                  # 'http://hotel.elong.com/50201055/',
+                  # 'http://hotel.elong.com/40201192/',
+                  # 'http://hotel.elong.com/50201284/',
+                  # 'http://hotel.elong.com/50201261/',
+                  # 'http://hotel.elong.com/50201481/',
+                  # 'http://hotel.elong.com/00101108/',
+                  # 'http://hotel.elong.com/40301051/',
+                  # 'http://hotel.elong.com/00101972/',
+                  # 'http://hotel.elong.com/40101839/',
+                  # 'http://hotel.elong.com/40101676/',
                   ]
 
 
