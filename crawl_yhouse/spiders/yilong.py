@@ -33,31 +33,27 @@ def chang_time(int_time):
     return otherStyleTime
 
 
+from crawl_yhouse.ceshi.ll import lls
+
 class YilongSpider(scrapy.Spider):
     name = 'yilong'
     # allowed_domains = ['http://hotel.elong.com/92494775/']
-    start_urls = [
-                  'http://hotel.elong.com/52001128/',
-                  'http://hotel.elong.com/91191052/',
-                  'http://hotel.elong.com/90684208/',
-                  'http://hotel.elong.com/50301037/',#这个很特别 需要单独处理
-                  'http://hotel.elong.com/10201185/',
-                  'http://hotel.elong.com/40201952/',
-                  'http://hotel.elong.com/91855173/',
-                  'http://hotel.elong.com/10201307/',
-                  'http://hotel.elong.com/40201044/',
-                  'http://hotel.elong.com/10201082/',
-                  # 'http://hotel.elong.com/50201055/',
-                  # 'http://hotel.elong.com/40201192/',
-                  # 'http://hotel.elong.com/50201284/',
-                  # 'http://hotel.elong.com/50201261/',
-                  # 'http://hotel.elong.com/50201481/',
-                  # 'http://hotel.elong.com/00101108/',
-                  # 'http://hotel.elong.com/40301051/',
-                  # 'http://hotel.elong.com/00101972/',
-                  # 'http://hotel.elong.com/40101839/',
-                  # 'http://hotel.elong.com/40101676/',
-                  ]
+    # start_urls = [
+    #               # 'http://hotel.elong.com/52001128/',
+    #               # 'http://hotel.elong.com/91191052/',
+    #               # 'http://hotel.elong.com/90684208/',
+    #               'http://hotel.elong.com/50301037/',#这个很特别 需要单独处理
+    #               # 'http://hotel.elong.com/10201185/',
+    #               # 'http://hotel.elong.com/40201952/',
+    #               # 'http://hotel.elong.com/91855173/',
+    #               'http://hotel.elong.com/10201307/',
+    #               # 'http://hotel.elong.com/40201044/',
+    #               # 'http://hotel.elong.com/10201082/',
+    #               # 'http://hotel.elong.com/50201055/',
+    #
+    #               ]
+
+    start_urls = lls
 
 
 
@@ -96,50 +92,53 @@ class YilongSpider(scrapy.Spider):
 
             print("*"*100)
             selector = Selector(response)
-            item['hotel_name'] = selector.xpath('/html/body/div[3]/div/div[1]/div[1]/div/h1/text()').extract()[0]
-            checkin = selector.xpath('/html/body/div[4]/div[1]/div[1]/div[4]/div[1]/label[1]/input/@value').extract()[0]
-            checkout = selector.xpath('/html/body/div[4]/div[1]/div[1]/div[4]/div[1]/label[2]/input/@value').extract()[0]
-            item['checkout'] = checkout
-            item['checkin'] = checkin
+            no_hotel = selector.xpath('//*[@id="roomSetContainer"]/div/div/div/span/a/text').extract()
+            if no_hotel[0] == '修改日期':
+                print('此日期没有房间跳过~~~~~~~~')
+                pass
+            else:
+                item['hotel_name'] = selector.xpath('/html/body/div[3]/div/div[1]/div[1]/div/h1/text()').extract()[0]
+                checkin = selector.xpath('/html/body/div[4]/div[1]/div[1]/div[4]/div[1]/label[1]/input/@value').extract()[0]
+                checkout = selector.xpath('/html/body/div[4]/div[1]/div[1]/div[4]/div[1]/label[2]/input/@value').extract()[0]
+                item['checkout'] = checkout
+                item['checkin'] = checkin
 
 
-            rom = selector.xpath('//*[@id="roomSetContainer"]/div[2]/div/div')
-            for i in range(len(rom)):
-                # 母房型级
-                room = rom[i].xpath('div[1]/div[3]/p[1]/span[1]/text()').extract()[0]
-                item['major_room_name'] = room
-                ll = rom[i].xpath('div[3]/table/tbody/tr')[0:-1]
-
-
-                item['bed_type'] = rom[i].xpath('div[1]/div[3]/p[2]/span[3]/text()').extract()[0]
-                item['network'] = rom[i].xpath('div[1]/div[3]/p[2]/span[9]/text()').extract()[0]
-                item['person'] = len(rom[i].xpath('div[1]/div[3]/p[2]/span[5]/i'))
+                rom = selector.xpath('//*[@id="roomSetContainer"]/div[2]/div/div')
+                for i in range(len(rom)):
+                    # 母房型级
+                    room = rom[i].xpath('div[1]/div[3]/p[1]/span[1]/text()').extract()[0]
+                    item['major_room_name'] = room
+                    ll = rom[i].xpath('div[3]/table/tbody/tr')[0:-1]
+                    item['bed_type'] = rom[i].xpath('div[1]/div[3]/p[2]/span[3]/text()').extract()[0]
+                    item['network'] = rom[i].xpath('div[1]/div[3]/p[2]/span[9]/text()').extract()[0]
+                    item['person'] = len(rom[i].xpath('div[1]/div[3]/p[2]/span[5]/i'))
 
 
 
-                for x in ll:
-                    item['major_room_id'] = x.xpath('@data-mroomid').extract()[0]
-                    item['minor_room_id'] = x.xpath('@data-sroomid').extract()[0]
-                    item['minor_room_name'] = x.xpath('td[2]/span/text()').extract()[0]
-                    item['breakfast'] = x.xpath('td[4]/text()').extract()[0]
-                    item['policy'] = x.xpath('td[5]/p[1]/span/text()').extract()[0]
-                    price = x.xpath('td[6]/span/span/text()').extract()[0]
-                    price_point = x.xpath('td[6]/span/span/span/text()').extract()
-                    if price:
-                        item['price'] = price
-                    else:
-                        item['price'] = price + price_point[0]
+                    for x in ll:
+                        item['major_room_id'] = x.xpath('@data-mroomid').extract()[0]
+                        item['minor_room_id'] = x.xpath('@data-sroomid').extract()[0]
+                        item['minor_room_name'] = x.xpath('td[2]/span/text()').extract()[0]
+                        item['breakfast'] = x.xpath('td[4]/text()').extract()[0]
+                        item['policy'] = x.xpath('td[5]/p[1]/span/text()').extract()[0]
+                        price = x.xpath('td[6]/span/span/text()').extract()[0]
+                        price_point = x.xpath('td[6]/span/span/span/text()').extract()
+                        if price:
+                            item['price'] = price
+                        else:
+                            item['price'] = price + price_point[0]
 
-                    item['create_time'] = chang_time_all()
+                        # item['create_time'] = chang_time_all()
 
-                    order_status = x.xpath('td[7]/span').extract()
-                    if len(order_status) == 1:
-                        order = 0
-                    else:
-                        order = 1
-                    item['order_status'] = order
-                    item['sou'] = 0
-                    yield item
+                        order_status = x.xpath('td[7]/span').extract()
+                        if len(order_status) == 1:
+                            order = 0
+                        else:
+                            order = 1
+                        item['order_status'] = order
+                        item['sou'] = 0
+                        yield item
 
 
 

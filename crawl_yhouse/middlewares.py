@@ -135,15 +135,22 @@ class CrawlYhouseDownloaderMiddleware(object):
 
             pro = [
 
-                '175.42.120.164:4561'
+                '123.156.179.7:4581',
+                '183.163.36.99:4554',
+                '36.56.149.214:4542',
+                '124.113.217.83:4551',
+                '121.232.8.163:4563',
+                '114.99.13.85:4576',
+                '121.226.14.75:4518',
+                '106.35.172.55:4593',
+                '117.57.21.156:4576',
+
             ]
             pp = random.choice(pro)
         print('本次使用的代理为', pp)
-        proxies = {
-            'http': pp,
-        }
+
         DR = '/usr/local/bin/chromedriver'
-        # request.meta["proxy"] = "http://"+pp
+
 
 
 
@@ -164,7 +171,9 @@ class CrawlYhouseDownloaderMiddleware(object):
 
 
             if hostname == 'chihiro':
+                self.option.add_argument('-proxy-server=http://' + pp)
                 self.driver = Chrome(options=self.option)
+
             else:
                 self.option.add_argument('-proxy-server=http://' + pp)
                 self.driver = Chrome(executable_path=DR, options=self.option)
