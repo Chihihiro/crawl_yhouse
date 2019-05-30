@@ -22,7 +22,7 @@ class CrawlYhouseItem(scrapy.Item):
     person = scrapy.Field()
     policy = scrapy.Field()
     price = scrapy.Field()
-    plice = scrapy.Field()
+    # plice = scrapy.Field()
     checkin = scrapy.Field()
     checkout = scrapy.Field()
     create_time = scrapy.Field()
