@@ -168,7 +168,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             else:
                 self.driver = Chrome(executable_path=DR, options=self.option)
             self.driver.set_page_load_timeout(15)
-            self.wait = WebDriverWait(self.driver, 10)
+            self.wait = WebDriverWait(self.driver, 15)
             id = re.search('\d+', request.url).group()
             try:
                 self.driver.get(request.url)
