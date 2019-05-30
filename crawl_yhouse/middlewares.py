@@ -162,7 +162,7 @@ class CrawlYhouseDownloaderMiddleware(object):
             self.option.add_argument("--disable-dev-shm-usage")
             self.option.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
 
-            # self.option.add_argument('-proxy-server=http://' + pp)
+            self.option.add_argument('-proxy-server=http://' + pp)
             if hostname == 'chihiro':
                 self.driver = Chrome(options=self.option)
             else:
