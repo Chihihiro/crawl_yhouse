@@ -111,17 +111,6 @@ class CrawlYhouseDownloaderMiddleware(object):
         if socket.gethostname() != 'chihiro':
             self.display = Display(visible=0, size=(400, 300))
             self.display.start()
-        self.option = ChromeOptions()
-        self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
-        self.prefs = {"profile.managed_default_content_settings.images": 2}
-        self.option.add_experimental_option("prefs", self.prefs)
-        self.option.add_argument('lang=zh_CN.UTF-8')
-        self.option.add_argument('blink-settings=imagesEnabled=false')
-        self.option.add_argument('--disable-gpu')
-        self.option.add_argument('--no-sandbox')
-        self.option.add_argument("--disable-dev-shm-usage")
-        self.option.add_argument(
-            'user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
     #     self.option = ChromeOptions()
     #     self.option.add_experimental_option('excludeSwitches', ['enable-automation'])
     #     self.prefs = {"profile.managed_default_content_settings.images": 2}
@@ -159,38 +148,49 @@ class CrawlYhouseDownloaderMiddleware(object):
 
         DR = '/usr/local/bin/chromedriver'
         try:
+            option = ChromeOptions()
+            option.add_experimental_option('excludeSwitches', ['enable-automation'])
+            prefs = {"profile.managed_default_content_settings.images": 2}
+            option.add_experimental_option("prefs", prefs)
+            option.add_argument('lang=zh_CN.UTF-8')
+            option.add_argument('blink-settings=imagesEnabled=false')
+            option.add_argument('--disable-gpu')
+            option.add_argument('--no-sandbox')
+            option.add_argument("--disable-dev-shm-usage")
+            option.add_argument(
+                'user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36')
             if hostname == 'chihiro':
-                self.option.add_argument('-proxy-server=http://' + pp)
-                self.driver = Chrome(options=self.option)
+                # option.add_argument('-proxy-server=http://' + pp)
+                driver = Chrome(options=option)
             else:
-                self.option.add_argument('-proxy-server=http://' + pp)
-                self.driver = Chrome(executable_path=DR, options=self.option)
-            self.driver.set_page_load_timeout(15)
-            self.wait = WebDriverWait(self.driver, 7)
+                option.add_argument('-proxy-server=http://' + pp)
+                driver = Chrome(executable_path=DR, options=option)
+            driver.set_page_load_timeout(15)
+            wait = WebDriverWait(driver, 10)
             try:
-                self.driver.get(request.url)
+                driver.get(request.url)
             except TimeoutException as e:
                 print(e)
                 print('*'*30)
                 print('timeout')
                 print(second)
-                self.driver.quit()
+                driver.quit()
                 if second == 0:
                     return self.process_request(request, spider, second=1)
                 else:
                     return HtmlResponse(url=request.url, body=request.url, status=202, encoding="utf-8", request=request)
             # self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '#roomSetContainer'))) #  .htype_list
-            self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list')))  #
+            wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, '.htype_list')))  #
             # 查找roomSetContainer 后立马请求
             time.sleep(2)
-            html = self.driver.page_source
-            self.driver.quit()
+            html = driver.page_source
+            driver.quit()
             return HtmlResponse(url=request.url, body=html, status=200, encoding="utf-8", request=request)
         except BaseException as e:
             print(e)
             print('综合问题')
             print(request.url)
-            self.driver.quit()
+            driver.quit()
             second += 1
             if second <= 2:#这里设置重新获取的机会默认2等于三次
                 # print('再给最后一次机会')

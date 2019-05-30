@@ -45,6 +45,8 @@ COOKIES_ENABLED = False
 #}
 
 
+COMMANDS_MODULE = 'crawl_yhouse.commands'
+
 # DOWNLOADER_MIDDLEWARES = {
 #    'crawl_yhouse.proxymiddlewares.ProxyMiddleware': 100,
 #    # 'scrapy.downloadermiddleware.useragent.UserAgentMiddleware': None,

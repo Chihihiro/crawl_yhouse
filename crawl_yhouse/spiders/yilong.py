@@ -43,12 +43,12 @@ class YilongSpider(scrapy.Spider):
                   'http://hotel.elong.com/91191052/',
                   'http://hotel.elong.com/90684208/',
                   'http://hotel.elong.com/50301037/',#这个很特别 需要单独处理
-                  'http://hotel.elong.com/10201185/',
-                  'http://hotel.elong.com/40201952/',
-                  'http://hotel.elong.com/91855173/',
-                  'http://hotel.elong.com/90602068/', #这个酒店就没有
+                  # 'http://hotel.elong.com/10201185/',
+                  # 'http://hotel.elong.com/40201952/',
+                  # 'http://hotel.elong.com/91855173/',
+                  # 'http://hotel.elong.com/90602068/', #这个酒店就没有
                   # 'http://hotel.elong.com/40201044/',
-                  'http://hotel.elong.com/10201082/',
+                  # 'http://hotel.elong.com/10201082/',
                   # 'http://hotel.elong.com/50201055/',
 
                   ]
@@ -142,3 +142,5 @@ class YilongSpider(scrapy.Spider):
                         item['order_status'] = order
                         item['sou'] = 0
                         yield item
+
+

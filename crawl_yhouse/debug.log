@@ -7,3 +7,14 @@
 [0529/150755.713:ERROR:file_io_win.cc(161)] CreateFile C:\Users\xiaod\AppData\Local\Temp\scoped_dir20544_1504\Crashpad\settings.dat: 系统找不到指定的文件。 (0x2)
 [0530/163814.325:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
 [0530/164241.737:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0530/165237.957:ERROR:prune_crash_reports.cc(34)] PruneCrashReportDatabase: Failed to get pending reports
+[0530/185304.788:ERROR:process_reader_win.cc(151)] SuspendThread: 拒绝访问。 (0x5)
+[0530/185304.788:ERROR:process_reader_win.cc(151)] SuspendThread: 拒绝访问。 (0x5)
+[0530/185304.789:ERROR:process_reader_win.cc(151)] SuspendThread: 拒绝访问。 (0x5)
+[0530/185304.789:ERROR:process_reader_win.cc(151)] SuspendThread: 拒绝访问。 (0x5)
+[0530/185304.789:ERROR:process_reader_win.cc(151)] SuspendThread: 拒绝访问。 (0x5)
+[0530/185304.789:ERROR:process_reader_win.cc(151)] SuspendThread: 拒绝访问。 (0x5)
+[0530/185304.789:ERROR:process_reader_win.cc(151)] SuspendThread: 拒绝访问。 (0x5)
+[0530/185304.789:ERROR:process_reader_win.cc(151)] SuspendThread: 拒绝访问。 (0x5)
+[0530/185304.789:ERROR:process_reader_win.cc(123)] NtOpenThread: {无法访问} 过程已请求访问一对象，但未给访问权限。 (0xc0000022)
+[0530/185304.789:ERROR:exception_snapshot_win.cc(98)] thread ID 15116 not found in process
