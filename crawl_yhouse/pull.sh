@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+echo "=======wx09======="
+ssh wx09 "cd /opt/crawl_yhouse/ ; git pull"
+
 echo "=======wx01======="
 ssh wx01 "cd /opt/crawl_yhouse/ ; git pull"
 
@@ -21,5 +24,4 @@ ssh wx06 "cd /opt/crawl_yhouse/ ; git pull"
 echo "=======wx08======="
 ssh wx08 "cd /opt/crawl_yhouse/ ; git pull"
 
-echo "=======wx09======="
-ssh wx09 "cd /opt/crawl_yhouse/ ; git pull"
+
