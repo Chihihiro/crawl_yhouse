@@ -22,7 +22,7 @@ NEWSPIDER_MODULE = 'crawl_yhouse.spiders'
 ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 10
+CONCURRENT_REQUESTS = 16
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://doc.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -59,9 +59,11 @@ COMMANDS_MODULE = 'crawl_yhouse.commands'
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-# DOWNLOADER_MIDDLEWARES = {
-#    'crawl_yhouse.middlewares.CrawlYhouseDownloaderMiddleware': 543,
-# }
+DOWNLOADER_MIDDLEWARES = {
+   'crawl_yhouse.middlewares.CrawlYhouseDownloaderMiddleware': 543,
+   'scrapy.contrib.downloadermiddleware.useragent.UserAgentMiddleware': None,
+   'scrapy.contrib.downloadermiddleware.httpproxy.HttpProxyMiddleware': None #https://www.cnblogs.com/xieqiankun/p/know_middleware_of_scrapy_1.html
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
