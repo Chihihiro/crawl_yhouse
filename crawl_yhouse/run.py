@@ -20,6 +20,7 @@ def main():
     p = Pool(2) #这个是多进程
     result = p.map(start_crawl, ss)
     print('over')
+    os.system("ps -efww|grep Xvfb |grep -v grep|cut -c 9-15|xargs kill -9")
 
 
 if __name__ == "__main__":

@@ -29,3 +29,31 @@ class CrawlYhouseItem(scrapy.Item):
     order_status = scrapy.Field()
     sou = scrapy.Field()
     pass
+
+
+
+class CrawlLianlianItem(scrapy.Item):
+    city = scrapy.Field()
+    id = scrapy.Field()
+    address = scrapy.Field()
+    # stores_name = scrapy.Field()
+    title = scrapy.Field()
+    original_price = scrapy.Field()#原价
+    price = scrapy.Field()#价格
+    sales = scrapy.Field()# 销量
+    title_name = scrapy.Field()# 销量
+
+    pass
+
+class CrawlAiqianggouItem(scrapy.Item):
+    city = scrapy.Field()
+    id = scrapy.Field()
+    address = scrapy.Field()
+    # stores_name = scrapy.Field()
+    title = scrapy.Field()
+    original_price = scrapy.Field()#原价
+    price = scrapy.Field()#价格
+    sales = scrapy.Field()# 销量
+    title_name = scrapy.Field()# 销量
+
+    pass

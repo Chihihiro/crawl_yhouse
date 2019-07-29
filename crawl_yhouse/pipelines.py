@@ -33,6 +33,8 @@ def clean3(str1):
 
 TABLE_DICT = {
     CrawlYhouseItem: 'ctrip_room_info_test',
+    CrawlLianlianItem: 'lianlian',
+    CrawlAiqianggouItem: 'aiqianggou'
 
 }
 from crawl_yhouse.iosjk import to_sql
